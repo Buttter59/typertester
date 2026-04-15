@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contact — TyperTester</title>
+<meta name="description" content="Get in touch with TyperTester. Send feedback, bug reports, or feature suggestions."/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/main.js"></script>
+<style>
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px;margin:0 auto;padding:0 clamp(1rem,5vw,4rem) clamp(4rem,8vw,6rem)}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:2rem;transition:border-color .2s}
+.contact-card:hover{border-color:var(--border2)}
+.cc-icon{font-size:32px;margin-bottom:1rem}
+.cc-title{font-size:18px;font-weight:700;margin-bottom:.5rem}
+.cc-sub{font-family:var(--mono);font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:1.2rem}
+.cc-link{font-family:var(--mono);font-size:14px;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;word-break:break-all}
+.cc-link:hover{text-decoration:underline}
+.feedback-box{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:2rem;max-width:900px;margin:0 auto;padding-left:clamp(1rem,5vw,4rem);padding-right:clamp(1rem,5vw,4rem)}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{height:120px;resize:vertical}
+.form-group select option{background:var(--bg2)}
+.submit-note{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:.5rem}
+.mailto-btn{font-family:var(--mono);font-size:13px;letter-spacing:2px;padding:12px 28px;border-radius:var(--radius);background:var(--accent);color:#111;font-weight:700;border:none;cursor:pointer;transition:all .2s;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.mailto-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="bracket">[</span><span class="t1">Typer</span><span class="t2">Tester</span><span class="logo-cursor"></span><span class="bracket">]</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="play.html">Play</a></li>
+    <li><a href="progress.html">Progress</a></li><li><a href="learn.html">Learn</a></li>
+    <li><a href="about.html">About</a></li><li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" aria-label="Toggle theme"></button>
+    <a href="play.html" class="play-nav-btn">▶ Play</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="section-tag">Get in Touch</div>
+  <h1>We'd Love<br><span class="accent">Your Feedback</span></h1>
+  <p>TyperTester is built by typists for typists. Every suggestion, bug report, and feature request makes the site better for everyone.</p>
+</div>
+<hr class="divider"/>
+
+<div class="contact-grid" style="margin-top:3rem">
+  <div class="contact-card">
+    <div class="cc-icon">📧</div>
+    <div class="cc-title">Email Us</div>
+    <div class="cc-sub">Send feedback, bug reports, feature requests, or just say hello. We read every message and try to respond within 48 hours.</div>
+    <a class="cc-link" href="mailto:typertesterweb@gmail.com">✉ typertesterweb@gmail.com</a>
+  </div>
+  <div class="contact-card">
+    <div class="cc-icon">🐛</div>
+    <div class="cc-title">Report a Bug</div>
+    <div class="cc-sub">Found something broken? Tell us what happened, what browser you're using, and what you expected to happen. Screenshots welcome.</div>
+    <a class="cc-link" href="mailto:typertesterweb@gmail.com?subject=Bug Report">✉ Report a bug</a>
+  </div>
+  <div class="contact-card">
+    <div class="cc-icon">💡</div>
+    <div class="cc-title">Suggest a Feature</div>
+    <div class="cc-sub">Have an idea that would make TyperTester better? We're always looking for ways to improve — new languages, modes, or UI improvements welcome.</div>
+    <a class="cc-link" href="mailto:typertesterweb@gmail.com?subject=Feature Suggestion">✉ Suggest a feature</a>
+  </div>
+  <div class="contact-card">
+    <div class="cc-icon">📚</div>
+    <div class="cc-title">Passage Submissions</div>
+    <div class="cc-sub">Know a great passage we should add? Submit interesting text in any of our supported languages — English, Filipino, or Spanish — and we'll review it.</div>
+    <a class="cc-link" href="mailto:typertesterweb@gmail.com?subject=Passage Submission">✉ Submit a passage</a>
+  </div>
+</div>
+
+<div style="max-width:900px;margin:3rem auto;padding:0 clamp(1rem,5vw,4rem)">
+  <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:center">
+    <div style="font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.8rem">Primary Contact</div>
+    <div style="font-family:var(--mono);font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--accent);margin-bottom:.5rem">typertesterweb@gmail.com</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--text2);margin-bottom:1.5rem">We respond to all messages within 24–48 hours.</div>
+    <a href="mailto:typertesterweb@gmail.com" class="mailto-btn">✉ Send Email</a>
+  </div>
+</div>
+
+<div style="max-width:900px;margin:0 auto;padding:0 clamp(1rem,5vw,4rem) clamp(4rem,7vw,6rem)">
+  <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:2rem">
+    <div style="font-size:14px;font-weight:700;margin-bottom:1rem">What to include in your message</div>
+    <div class="prose">
+      <p>The more detail you provide, the faster we can help. For bug reports: your browser name and version, your operating system, what you were doing when the issue occurred, and whether it happens every time or occasionally.</p>
+      <p>For feature requests: describe the problem you're trying to solve, not just the solution. "I want a metronome" is good; "I want a way to practice typing at a consistent rhythm because I tend to burst-and-pause" is better — it helps us find the best solution.</p>
+      <p>For general feedback: anything goes. We love hearing how people use TyperTester and what they think could be improved.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand"><div class="brand-name">[TyperTester]</div><div class="brand-sub">Free · No ads · No account</div></div>
+  <div class="footer-links">
+    <div class="footer-col"><h5>Test</h5><a href="play.html">Play Now</a></div>
+    <div class="footer-col"><h5>Learn</h5><a href="learn.html">Improve WPM</a></div>
+    <div class="footer-col"><h5>Site</h5><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="privacy.html">Privacy</a></div>
+  </div>
+</footer>
+<div class="footer-bottom"><p>© 2025 TyperTester.</p><p>typertesterweb@gmail.com</p></div>
+</body>
+</html>
