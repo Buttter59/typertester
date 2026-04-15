@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learn to Type Faster — TyperTester</title>
-  <meta name="description" content="Learn what WPM means, how to improve your typing speed, and the real benefits of being a fast typist." />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="js/main.js" defer></script>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Learn to Type Faster — TyperTester</title>
+<meta name="description" content="Learn touch typing, proper finger placement with our hand guide, WPM tiers, and 10 proven ways to type faster."/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/main.js"></script>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="nav-logo"><span class="bracket">[</span><span class="t1">Typer</span><span class="t2">Tester</span><span class="logo-cursor"></span><span class="bracket">]</span></a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="play.html">Play</a></li>
-    <li><a href="progress.html">Progress</a></li>
-    <li><a href="learn.html" class="active">Learn</a></li>
-    <li><a href="about.html">About</a></li>
+    <li><a href="index.html">Home</a></li><li><a href="play.html">Play</a></li>
+    <li><a href="progress.html">Progress</a></li><li><a href="learn.html" class="active">Learn</a></li>
+    <li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li>
   </ul>
   <div class="nav-right">
     <button class="theme-toggle" aria-label="Toggle theme"></button>
@@ -29,20 +25,99 @@
 <div class="page-hero">
   <div class="section-tag">Knowledge</div>
   <h1>Type Faster.<br><span class="accent">Work Smarter.</span></h1>
-  <p>Everything you need to know about typing speed — what it is, why it matters, and how to genuinely improve it.</p>
+  <p>Everything you need to know about typing speed — what it is, proper finger placement, and how to genuinely improve.</p>
 </div>
-<hr class="divider" />
+<hr class="divider"/>
+
+<!-- HAND GUIDE -->
+<div class="section" id="hand-guide">
+  <div class="section-tag">Interactive Hand Guide</div>
+  <h2 class="section-title">Which finger types which key?</h2>
+  <p class="section-sub">Hover or click any key to see which finger should press it and watch the hand guide highlight the correct finger. This is the foundation of touch typing.</p>
+
+  <div class="hand-guide-wrap">
+    <!-- Legend -->
+    <div class="finger-legend">
+      <div class="fl-item"><div class="fl-dot" style="background:#e53935"></div>Left Pinky</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#fb8c00"></div>Left Ring</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#fdd835"></div>Left Middle</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#43a047"></div>Left Index</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#bbb"></div>Thumbs</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#1e88e5"></div>Right Index</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#8e24aa"></div>Right Middle</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#00897b"></div>Right Ring</div>
+      <div class="fl-item"><div class="fl-dot" style="background:#e91e63"></div>Right Pinky</div>
+    </div>
+
+    <!-- Keyboard -->
+    <div class="kb-wrap" id="kb-wrap"></div>
+
+    <!-- Info box -->
+    <div class="finger-info-box" id="finger-info">
+      Click any key above to see which finger to use →
+    </div>
+
+    <!-- Hand SVGs -->
+    <div class="hands-display">
+      <div class="hand-svg-wrap">
+        <svg id="left-hand" width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Palm -->
+          <ellipse cx="90" cy="155" rx="62" ry="55" fill="#555"/>
+          <!-- Thumb -->
+          <ellipse id="lf-thumb" cx="28" cy="140" rx="14" ry="30" fill="#888" transform="rotate(-30 28 140)"/>
+          <!-- Index -->
+          <rect id="lf-index" x="44" y="55" width="22" height="70" rx="11" fill="#888"/>
+          <!-- Middle -->
+          <rect id="lf-middle" x="70" y="42" width="22" height="82" rx="11" fill="#888"/>
+          <!-- Ring -->
+          <rect id="lf-ring" x="96" y="50" width="22" height="74" rx="11" fill="#888"/>
+          <!-- Pinky -->
+          <rect id="lf-pinky" x="122" y="68" width="18" height="58" rx="9" fill="#888"/>
+          <!-- Labels -->
+          <text x="55" y="90" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">index</text>
+          <text x="81" y="75" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">mid</text>
+          <text x="107" y="83" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">ring</text>
+          <text x="131" y="98" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">pin</text>
+        </svg>
+        <div class="hand-label">Left Hand</div>
+      </div>
+      <div class="hand-svg-wrap">
+        <svg id="right-hand" width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="90" cy="155" rx="62" ry="55" fill="#555"/>
+          <ellipse id="rf-thumb" cx="152" cy="140" rx="14" ry="30" fill="#888" transform="rotate(30 152 140)"/>
+          <rect id="rf-index" x="114" y="55" width="22" height="70" rx="11" fill="#888"/>
+          <rect id="rf-middle" x="88" y="42" width="22" height="82" rx="11" fill="#888"/>
+          <rect id="rf-ring" x="62" y="50" width="22" height="74" rx="11" fill="#888"/>
+          <rect id="rf-pinky" x="40" y="68" width="18" height="58" rx="9" fill="#888"/>
+          <text x="125" y="90" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">index</text>
+          <text x="99" y="75" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">mid</text>
+          <text x="73" y="83" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">ring</text>
+          <text x="49" y="98" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-family="monospace">pin</text>
+        </svg>
+        <div class="hand-label">Right Hand</div>
+      </div>
+    </div>
+
+    <!-- Practice input -->
+    <div class="practice-area">
+      <input type="text" class="practice-input" id="practice-input" placeholder="Type here to practice — the keyboard highlights each key as you type" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <div class="practice-hint">Type any key — the guide will show you the correct finger to use</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider"/>
 
 <!-- WHAT IS WPM -->
 <div class="section" id="what-is-wpm">
   <div class="section-tag">The Basics</div>
   <h2 class="section-title">What is WPM?</h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start" class="two-col">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start">
     <div class="prose">
-      <p><strong>Words Per Minute (WPM)</strong> is the standard measure of typing speed. In most typing tests — including TyperTester — a "word" is defined as <strong>five characters</strong>, including spaces. This standardized definition makes it fair to compare speeds regardless of whether someone types long words or short ones.</p>
-      <p>The formula is: <strong>(Characters typed ÷ 5) ÷ Minutes elapsed</strong>.</p>
-      <p><strong>Raw WPM</strong> counts every word you attempted, including errors. <strong>Net WPM</strong> (what TyperTester shows) subtracts errors, rewarding accuracy alongside speed. A high raw WPM with low accuracy is actually slower in practice because you'd need to go back and correct mistakes.</p>
-      <p><strong>Accuracy</strong> is just as important as raw speed. A 100 WPM typist at 95% accuracy is more productive than a 120 WPM typist at 75% accuracy — the second person spends significant time fixing errors.</p>
+      <p><strong>Words Per Minute (WPM)</strong> is the standard measure of typing speed. In most typing tests a "word" is defined as <strong>five characters</strong>, including spaces. This makes it fair to compare speeds regardless of word length.</p>
+      <p>Formula: <strong>(Characters typed ÷ 5) ÷ Minutes elapsed</strong></p>
+      <p><strong>Raw WPM</strong> counts every word attempted including errors. <strong>Net WPM</strong> (what TyperTester shows) subtracts errors — rewarding accuracy alongside speed. A 100 WPM typist at 95% accuracy is more productive than a 120 WPM typist at 75% accuracy.</p>
+      <p><strong>Consistency</strong> measures how stable your speed was throughout the test. High consistency (80%+) means your speed was steady. Low consistency means you had significant bursts and slowdowns.</p>
     </div>
     <div>
       <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;font-family:var(--mono);font-size:13px">
@@ -51,206 +126,180 @@
         <div style="color:var(--text2);font-size:12px;margin-bottom:1.2rem">Example: 300 characters in 1 minute = 60 WPM</div>
         <div style="border-top:1px solid var(--border);padding-top:1rem">
           <div style="font-size:10px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:.8rem">One "word" = 5 chars</div>
-          <div style="color:var(--text2);font-size:12px">"hello" = 1 word<br>"go" + "to" + "store" = 1 word<br>Spaces count as characters</div>
+          <div style="color:var(--text2);font-size:12px">"hello" = 1 word<br>Spaces count as characters<br>Accuracy matters as much as speed</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<hr class="divider" />
+<hr class="divider"/>
 
 <!-- WPM TIERS -->
 <div class="section">
   <div class="section-tag">Where Do You Stand?</div>
   <h2 class="section-title">Global WPM Tiers</h2>
-  <p class="section-sub">How does your typing speed compare to people worldwide? Here's a breakdown of where typists fall.</p>
+  <p class="section-sub">How does your typing speed compare to people worldwide?</p>
   <div class="tier-grid">
-    <div class="tier-card" style="border-color:#55555533">
-      <div class="tier-range" style="color:#888">&lt; 25</div>
-      <div class="tier-name">Beginner</div>
-      <div class="tier-pct">~15% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#66666633">
-      <div class="tier-range" style="color:#999">25–40</div>
-      <div class="tier-name">Below Average</div>
-      <div class="tier-pct">~20% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#42a5f533">
-      <div class="tier-range" style="color:#42a5f5">40–55</div>
-      <div class="tier-name">Average</div>
-      <div class="tier-pct">~30% of users · Global avg: 40 WPM</div>
-    </div>
-    <div class="tier-card" style="border-color:#42a5f555">
-      <div class="tier-range" style="color:#64b5f6">55–70</div>
-      <div class="tier-name">Above Average</div>
-      <div class="tier-pct">~20% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#4caf5033">
-      <div class="tier-range" style="color:#4caf50">70–90</div>
-      <div class="tier-name">Fast</div>
-      <div class="tier-pct">~10% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#f9a82533">
-      <div class="tier-range" style="color:#f9a825">90–120</div>
-      <div class="tier-name">Professional</div>
-      <div class="tier-pct">~4% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#ef535033">
-      <div class="tier-range" style="color:#ef5350">120–150</div>
-      <div class="tier-name">Elite</div>
-      <div class="tier-pct">~1% of users</div>
-    </div>
-    <div class="tier-card" style="border-color:#ef535066">
-      <div class="tier-range" style="color:#ef5350">150+</div>
-      <div class="tier-name">World-Class</div>
-      <div class="tier-pct">World record: 212 WPM (Sean Wrona)</div>
-    </div>
-  </div>
-  <div style="margin-top:1.5rem;font-family:var(--mono);font-size:12px;color:var(--text3);background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem">
-    <strong style="color:var(--text2)">Reference points:</strong> Hunt-and-peck typists average 27–37 WPM. Touch typists average 50–70 WPM. Stenographers and court reporters type 225+ WPM using specialized machines. The average smartphone user taps at around 36–39 WPM.
+    <div class="tier-card" style="border-color:#55555533"><div class="tier-range" style="color:#888">&lt; 25</div><div class="tier-name">Beginner</div><div class="tier-pct">~15% of users</div></div>
+    <div class="tier-card" style="border-color:#66666633"><div class="tier-range" style="color:#999">25–40</div><div class="tier-name">Below Average</div><div class="tier-pct">~20% of users</div></div>
+    <div class="tier-card" style="border-color:#42a5f533"><div class="tier-range" style="color:#42a5f5">40–55</div><div class="tier-name">Average</div><div class="tier-pct">~30% · Global avg: 40 WPM</div></div>
+    <div class="tier-card" style="border-color:#42a5f555"><div class="tier-range" style="color:#64b5f6">55–70</div><div class="tier-name">Above Average</div><div class="tier-pct">~20% of users</div></div>
+    <div class="tier-card" style="border-color:#4caf5033"><div class="tier-range" style="color:#4caf50">70–90</div><div class="tier-name">Fast</div><div class="tier-pct">~10% of users</div></div>
+    <div class="tier-card" style="border-color:#f9a82533"><div class="tier-range" style="color:#f9a825">90–120</div><div class="tier-name">Professional</div><div class="tier-pct">~4% of users</div></div>
+    <div class="tier-card" style="border-color:#ef535033"><div class="tier-range" style="color:#ef5350">120–150</div><div class="tier-name">Elite</div><div class="tier-pct">~1% of users</div></div>
+    <div class="tier-card" style="border-color:#ef535066"><div class="tier-range" style="color:#ef5350">150+</div><div class="tier-name">World-Class</div><div class="tier-pct">World record: 212 WPM</div></div>
   </div>
 </div>
-
-<hr class="divider" />
+<hr class="divider"/>
 
 <!-- BENEFITS -->
 <div class="section" id="benefits">
   <div class="section-tag">Why It Matters</div>
-  <h2 class="section-title">Benefits of Typing Faster</h2>
-  <p class="section-sub">Typing speed isn't just a party trick. It has measurable impact on your career, creativity, and daily life.</p>
+  <h2 class="section-title">Benefits of typing faster</h2>
   <div class="feature-grid" style="margin-top:2rem">
-    <div class="feature-card">
-      <div class="feature-icon">💼</div>
-      <div class="feature-title">Career Productivity</div>
-      <div class="feature-desc">Knowledge workers type an average of 40 hours of content per year. Going from 40 to 80 WPM cuts that time in half — freeing hours every week for deeper work.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🧠</div>
-      <div class="feature-title">Think Without Friction</div>
-      <div class="feature-desc">When typing is slow, your fingers can't keep up with your thoughts. Faster typing means ideas flow directly to the screen without being lost in the bottleneck.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">✉️</div>
-      <div class="feature-title">Faster Communication</div>
-      <div class="feature-desc">Emails, Slack messages, documents — professionals who type faster respond faster, communicate more clearly, and reduce bottlenecks in team workflows.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">👨‍💻</div>
-      <div class="feature-title">Coding Speed</div>
-      <div class="feature-desc">Developers who type faster spend less time fighting their keyboard and more time thinking architecturally. Even a 20 WPM improvement cuts real friction from daily coding sessions.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📝</div>
-      <div class="feature-title">Better Writing</div>
-      <div class="feature-desc">Writers who type faster can capture ideas in their natural rhythm. Slow typing interrupts the creative flow; fast typing becomes transparent — you forget you're even using a keyboard.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎓</div>
-      <div class="feature-title">Academic Advantage</div>
-      <div class="feature-desc">Students who type fast take better notes, write better essays, and finish exams with time to review. Typing is now as foundational to academic success as reading.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏆</div>
-      <div class="feature-title">Competitive Edge</div>
-      <div class="feature-desc">In fields like customer support, legal transcription, data entry, and journalism, WPM directly affects output and earnings. Speed is a measurable professional advantage.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">😌</div>
-      <div class="feature-title">Reduced Fatigue</div>
-      <div class="feature-desc">Proper typing technique — which naturally develops as speed increases — reduces strain on fingers, wrists, and shoulders compared to poor posture hunt-and-peck methods.</div>
-    </div>
+    <div class="feature-card"><div class="feature-icon">💼</div><div class="feature-title">Career Productivity</div><div class="feature-desc">Going from 40 to 80 WPM cuts your typing time in half — freeing hours every week for deeper, higher-value work.</div></div>
+    <div class="feature-card"><div class="feature-icon">🧠</div><div class="feature-title">Think Without Friction</div><div class="feature-desc">When typing is slow, your fingers can't keep up with your thoughts. Faster typing means ideas flow directly to the screen.</div></div>
+    <div class="feature-card"><div class="feature-icon">✉️</div><div class="feature-title">Faster Communication</div><div class="feature-desc">Professionals who type faster respond faster and communicate more clearly, reducing bottlenecks in team workflows.</div></div>
+    <div class="feature-card"><div class="feature-icon">👨‍💻</div><div class="feature-title">Coding Speed</div><div class="feature-desc">Developers who type faster spend less time fighting their keyboard and more time thinking architecturally.</div></div>
+    <div class="feature-card"><div class="feature-icon">📝</div><div class="feature-title">Better Writing</div><div class="feature-desc">Writers who type fast can capture ideas in their natural rhythm. Slow typing interrupts the creative flow.</div></div>
+    <div class="feature-card"><div class="feature-icon">😌</div><div class="feature-title">Reduced Fatigue</div><div class="feature-desc">Proper typing technique — which develops naturally as speed increases — reduces strain on fingers, wrists, and shoulders.</div></div>
   </div>
 </div>
-
-<hr class="divider" />
+<hr class="divider"/>
 
 <!-- TIPS -->
 <div class="section" id="tips">
   <div class="section-tag">How to Improve</div>
-  <h2 class="section-title">10 Proven Ways to Type Faster</h2>
+  <h2 class="section-title">10 proven ways to type faster</h2>
   <div class="tips-grid">
-    <div class="tip-card">
-      <div class="tip-num">Tip 01</div>
-      <div class="tip-title">Learn Touch Typing First</div>
-      <div class="tip-desc">This is the single most impactful change you can make. Place your fingers on the home row (ASDF–JKL;) and never look at the keyboard. It feels slow at first but unlocks dramatically higher speeds within weeks.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 02</div>
-      <div class="tip-title">Prioritize Accuracy Over Speed</div>
-      <div class="tip-desc">Speed follows accuracy — not the other way around. If you're making frequent errors, slow down until you can type at 98%+ accuracy, then gradually increase your pace. Rushing creates bad habits that are hard to unlearn.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 03</div>
-      <div class="tip-title">Practice Daily, Not Marathon Sessions</div>
-      <div class="tip-desc">15–30 minutes of focused daily practice beats a 3-hour weekend session. Consistency matters far more than intensity. Muscle memory builds through repetition over time, not cramming.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 04</div>
-      <div class="tip-title">Use All Ten Fingers</div>
-      <div class="tip-desc">Each finger has assigned keys. Your left index covers F and G; your right index covers J and H. Using all ten fingers distributes the work evenly and enables true speed. Even a few days of deliberate practice makes a real difference.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 05</div>
-      <div class="tip-title">Type Real Text, Not Just Random Words</div>
-      <div class="tip-desc">Practicing with actual sentences and stories (like TyperTester uses) trains rhythm, punctuation habits, and the word patterns that appear in real writing. Random word lists are less transferable to everyday use.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 06</div>
-      <div class="tip-title">Read Ahead While Typing</div>
-      <div class="tip-desc">Fast typists look ahead — reading the next word or phrase while their fingers handle the current one. This eliminates the micro-pause between words that slows most typists down significantly.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 07</div>
-      <div class="tip-title">Fix Your Posture and Setup</div>
-      <div class="tip-desc">Sit upright with your feet flat, keyboard at elbow height, and monitor at eye level. Your wrists should float above the keyboard — not rest on the desk while typing. A good setup removes physical friction that drags speed down.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 08</div>
-      <div class="tip-title">Identify and Drill Your Weak Keys</div>
-      <div class="tip-desc">Most typists have 3–5 keys they consistently mistype. Identify them from your error patterns and drill those specific combinations until they become automatic. TyperTester's error markers on the graph reveal exactly where you slow down.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 09</div>
-      <div class="tip-title">Increase Difficulty Gradually</div>
-      <div class="tip-desc">Start with Easy passages until you hit 50+ WPM, then move to Normal, then Hard. Trying to jump difficulty levels too quickly creates frustration and reinforces errors. Level up when you can maintain 95% accuracy comfortably.</div>
-    </div>
-    <div class="tip-card">
-      <div class="tip-num">Tip 10</div>
-      <div class="tip-title">Track Your Progress</div>
-      <div class="tip-desc">Seeing your WPM trend upward is one of the most motivating things in typing practice. Use TyperTester's records to watch your best scores climb over days and weeks. Progress you can measure is progress you'll maintain.</div>
-    </div>
+    <div class="tip-card"><div class="tip-num">Tip 01</div><div class="tip-title">Learn Touch Typing First</div><div class="tip-desc">Place fingers on home row (ASDF–JKL;) and never look at the keyboard. Use the Hand Guide above to learn which finger covers each key. This single change unlocks dramatically higher speeds.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 02</div><div class="tip-title">Accuracy Before Speed</div><div class="tip-desc">Speed follows accuracy. If you're making frequent errors, slow down until you can type at 98%+ accuracy, then gradually increase pace. Rushing creates bad habits that are hard to unlearn.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 03</div><div class="tip-title">Practice Daily</div><div class="tip-desc">15–30 minutes of focused daily practice beats a 3-hour weekend session. Muscle memory builds through repetition over time, not cramming.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 04</div><div class="tip-title">Use All Ten Fingers</div><div class="tip-desc">Each finger has assigned keys. Left index covers F and G; right index covers J and H. Using all ten fingers distributes the work evenly and enables true speed.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 05</div><div class="tip-title">Type Real Text</div><div class="tip-desc">Practicing with actual sentences and stories trains rhythm, punctuation habits, and the word patterns that appear in real writing. TyperTester uses real passages for this reason.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 06</div><div class="tip-title">Read Ahead While Typing</div><div class="tip-desc">Fast typists look ahead — reading the next word while their fingers handle the current one. This eliminates the micro-pause between words that slows most typists down.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 07</div><div class="tip-title">Fix Your Posture</div><div class="tip-desc">Sit upright, keyboard at elbow height, monitor at eye level. Wrists should float above the keyboard. A good setup removes physical friction that drags speed down.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 08</div><div class="tip-title">Drill Your Weak Keys</div><div class="tip-desc">Most typists have 3–5 keys they consistently mistype. Check your heatmap on the Progress page to find which letters slow you down. Drill those specific combinations.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 09</div><div class="tip-title">Increase Difficulty Gradually</div><div class="tip-desc">Start with Easy passages until you hit 50+ WPM, then move to Normal, then Hard. Level up when you can maintain 95% accuracy comfortably.</div></div>
+    <div class="tip-card"><div class="tip-num">Tip 10</div><div class="tip-title">Track Your Progress</div><div class="tip-desc">Seeing your WPM trend upward is one of the most motivating things in typing practice. Use the Progress page to watch your scores climb over days and weeks.</div></div>
   </div>
 </div>
+<hr class="divider"/>
 
-<hr class="divider" />
-
-<!-- CTA -->
 <div class="section" style="text-align:center;max-width:600px">
   <div class="section-tag">Apply It Now</div>
   <h2 class="section-title">Knowledge is only the start.</h2>
-  <p class="section-sub" style="margin:0 auto 2rem">The best way to improve is to practice. Take a test right now and find out exactly where you stand.</p>
+  <p class="section-sub" style="margin:0 auto 2rem">The best way to improve is to practice. Take a test now and find out exactly where you stand.</p>
   <a href="play.html" class="btn-primary">▶ Start Typing Test</a>
 </div>
 
 <footer>
-  <div class="footer-brand">
-    <div class="brand-name" style="font-family:var(--mono)">[TyperTester]</div>
-    <div class="brand-sub">Free typing speed test · No ads · No account needed</div>
-  </div>
+  <div class="footer-brand"><div class="brand-name">[TyperTester]</div><div class="brand-sub">Free · No ads · No account</div></div>
   <div class="footer-links">
     <div class="footer-col"><h5>Test</h5><a href="play.html">Play Now</a></div>
-    <div class="footer-col"><h5>Learn</h5><a href="learn.html#what-is-wpm">What is WPM?</a><a href="learn.html#tips">Typing Tips</a><a href="learn.html#benefits">Benefits</a></div>
-    <div class="footer-col"><h5>Site</h5><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="faq.html">FAQ</a></div>
+    <div class="footer-col"><h5>Learn</h5><a href="learn.html#hand-guide">Hand Guide</a><a href="learn.html#what-is-wpm">What is WPM?</a><a href="learn.html#tips">Tips</a></div>
+    <div class="footer-col"><h5>Site</h5><a href="about.html">About</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a></div>
   </div>
 </footer>
-<div class="footer-bottom">
-  <p>© 2025 TyperTester. Built with passion for fast typists.</p>
-  <p>Free to use forever.</p>
-</div>
+<div class="footer-bottom"><p>© 2025 TyperTester.</p><p>typertesterweb@gmail.com</p></div>
 
-<style>
-@media(max-width:768px){.two-col{grid-template-columns:1fr!important}}
-</style>
+<script>
+// ── FINGER MAP ──
+// finger: lp=left pinky, lr=left ring, lm=left middle, li=left index, th=thumbs, ri=right index, rm=right middle, rr=right ring, rp=right pinky
+var FMAP = {
+  '`':'lp','1':'lp','q':'lp','a':'lp','z':'lp',
+  '2':'lr','w':'lr','s':'lr','x':'lr',
+  '3':'lm','e':'lm','d':'lm','c':'lm',
+  '4':'li','5':'li','r':'li','t':'li','f':'li','g':'li','v':'li','b':'li',
+  ' ':'th',
+  '6':'ri','7':'ri','y':'ri','u':'ri','h':'ri','j':'ri','n':'ri','m':'ri',
+  '8':'rm','i':'rm','k':'rm',',':'rm',
+  '9':'rr','o':'rr','l':'rr','.':'rr',
+  '0':'rp','-':'rp','=':'rp','p':'rp','[':'rp',']':'rp','\\':'rp',';':'rp',"'":'rp','/':'rp',
+};
+var FINFO = {
+  'lp': { name:'Left Pinky',  color:'#e53935', hand:'left',  part:'lf-pinky'  },
+  'lr': { name:'Left Ring',   color:'#fb8c00', hand:'left',  part:'lf-ring'   },
+  'lm': { name:'Left Middle', color:'#fdd835', hand:'left',  part:'lf-middle' },
+  'li': { name:'Left Index',  color:'#43a047', hand:'left',  part:'lf-index'  },
+  'th': { name:'Thumb',       color:'#bbb',    hand:'both',  part:'lf-thumb,rf-thumb' },
+  'ri': { name:'Right Index', color:'#1e88e5', hand:'right', part:'rf-index'  },
+  'rm': { name:'Right Middle',color:'#8e24aa', hand:'right', part:'rf-middle' },
+  'rr': { name:'Right Ring',  color:'#00897b', hand:'right', part:'rf-ring'   },
+  'rp': { name:'Right Pinky', color:'#e91e63', hand:'right', part:'rf-pinky'  },
+};
+var ROWS = [
+  ['`','1','2','3','4','5','6','7','8','9','0','-','='],
+  ['q','w','e','r','t','y','u','i','o','p','[',']','\\'],
+  ['a','s','d','f','g','h','j','k','l',';',"'"],
+  ['z','x','c','v','b','n','m',',','.','/'],
+  [' ']
+];
+var WIDE = {' ':true};
+var WIDER = {'a':true,'\\':true};
+var lastKey = null;
+
+function buildKeyboard() {
+  var wrap = document.getElementById('kb-wrap');
+  ROWS.forEach(function(row) {
+    var rowEl = document.createElement('div'); rowEl.className = 'kb-row';
+    row.forEach(function(key) {
+      var f = FMAP[key];
+      var info = f ? FINFO[f] : null;
+      var el = document.createElement('div');
+      el.className = 'kb-key' + (WIDE[key] ? ' widest' : WIDER[key] ? ' wider' : '');
+      el.textContent = key === ' ' ? 'SPACE' : key.toUpperCase();
+      el.style.background = info ? info.color + 'cc' : '#555';
+      el.dataset.key = key;
+      el.addEventListener('click', function(){ highlightKey(key); });
+      el.addEventListener('mouseenter', function(){ highlightKey(key); });
+      rowEl.appendChild(el);
+    });
+    wrap.appendChild(rowEl);
+  });
+}
+
+function resetHands() {
+  ['lf-thumb','lf-index','lf-middle','lf-ring','lf-pinky','rf-thumb','rf-index','rf-middle','rf-ring','rf-pinky'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.style.fill = '#888';
+  });
+}
+
+function highlightKey(key) {
+  // Remove old highlight
+  document.querySelectorAll('.kb-key.highlight').forEach(function(el){ el.classList.remove('highlight'); });
+  // Highlight new key
+  var keyEls = document.querySelectorAll('.kb-key');
+  keyEls.forEach(function(el){ if (el.dataset.key === key) el.classList.add('highlight'); });
+  // Reset hands
+  resetHands();
+  var f = FMAP[key];
+  if (!f) return;
+  var info = FINFO[f];
+  if (!info) return;
+  // Highlight finger(s)
+  info.part.split(',').forEach(function(pid) {
+    var el = document.getElementById(pid.trim()); if (el) el.style.fill = info.color;
+  });
+  // Update info box
+  var infoBox = document.getElementById('finger-info');
+  infoBox.innerHTML = 'Key <strong>' + (key === ' ' ? 'SPACE' : key.toUpperCase()) + '</strong> → use your <strong>' + info.name + '</strong>';
+  lastKey = key;
+}
+
+// Practice input
+document.addEventListener('DOMContentLoaded', function() {
+  buildKeyboard();
+  var input = document.getElementById('practice-input');
+  if (input) {
+    input.addEventListener('keydown', function(e) {
+      var key = e.key.toLowerCase();
+      if (key === 'backspace' || key === 'shift' || key === 'control' || key === 'alt' || key === 'meta') return;
+      if (key === ' ') { e.preventDefault(); highlightKey(' '); return; }
+      if (key.length === 1) highlightKey(key);
+    });
+  }
+});
+</script>
 </body>
 </html>
