@@ -2,17 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Play — TyperTester</title>
-<meta name="description" content="Free typing speed test. Choose difficulty, language, or paste custom text. Track WPM, accuracy, and unlock achievements."/>
+<title>Play Typing Test — TyperTester | Free WPM Test</title>
+<meta name="description" content="Start your free typing speed test now. Choose difficulty, language, or use your own text. Measure WPM, accuracy and consistency."/>
+<link rel="canonical" href="https://typertester.web/play.html"/>
 <link rel="stylesheet" href="css/style.css"/>
-<!-- Scripts loaded synchronously so functions are available immediately -->
 <script src="js/main.js"></script>
 <script src="js/features.js"></script>
 <style>
 :root{--fs:clamp(14px,1.6vw,21px);--timer:clamp(54px,7vw,92px);--stat:clamp(17px,2.2vw,26px)}
-#play-app{font-family:var(--mono);display:flex;flex-direction:column;flex:1;min-height:calc(100vh - 58px)}
-.g-screen{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:clamp(1rem,3vw,2.5rem) clamp(1rem,4vw,3.5rem);text-align:center}
+/* ── play app container ── */
+#play-app{font-family:var(--mono);display:flex;flex-direction:column;min-height:100vh;padding-top:var(--nav-h)}
+.g-screen{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:calc(100vh - var(--nav-h));padding:clamp(1rem,3vw,2.5rem) clamp(1rem,4vw,3.5rem);text-align:center}
 .g-screen.active{display:flex}
+/* screens that scroll need overflow */
+#result-screen,#rec-screen{justify-content:flex-start;overflow-y:auto}
+#game-screen{justify-content:flex-start;padding:0}
+
+/* options */
 .diff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:clamp(380px,62vw,700px);margin-bottom:clamp(1rem,2.5vw,2rem)}
 @media(max-width:520px){.diff-grid{grid-template-columns:1fr 1fr}}
 .dc{padding:clamp(.7rem,1.3vw,1.2rem) clamp(.6rem,1vw,.9rem);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s;text-align:left;background:var(--bg2)}
@@ -20,79 +26,92 @@
 .dl{font-size:clamp(11px,1.1vw,13px);font-weight:700;margin-bottom:3px;letter-spacing:1px}
 .dd{font-size:clamp(8px,.8vw,10px);color:var(--text3);line-height:1.5}
 .dc.easy .dl{color:var(--green)}.dc.easy.sel{border-color:var(--green)}
-.dc.normal .dl{color:var(--blue)}.dc.normal.sel{border-color:var(--blue)}
+.dc.normal .dl{color:var(--accent)}.dc.normal.sel{border-color:var(--accent)}
 .dc.hard .dl{color:var(--orange)}.dc.hard.sel{border-color:var(--orange)}
 .dc.extreme .dl{color:var(--red)}.dc.extreme.sel{border-color:var(--red)}
 .time-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:clamp(1rem,2.5vw,2rem)}
 .tb{padding:8px clamp(10px,1.5vw,20px);border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);font-size:11px;font-family:var(--mono);cursor:pointer;transition:all .13s;letter-spacing:2px}
-.tb:hover{border-color:var(--border2);color:var(--text2)}.tb.on{border-color:var(--text);background:var(--text);color:var(--bg);font-weight:700}
+.tb:hover{border-color:var(--border2);color:var(--text2)}.tb.on{border-color:var(--accent);background:var(--accent);color:#fff;font-weight:700}
 .pg-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:5px;text-transform:uppercase;margin-bottom:4px;font-family:var(--mono)}
 .pg-sub{font-size:10px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:clamp(.8rem,2vw,1.8rem);font-family:var(--mono)}
-.start-btn{font-family:var(--mono);font-size:13px;letter-spacing:2px;padding:13px 38px;border-radius:var(--radius);background:var(--accent);color:#111;font-weight:700;border:none;cursor:pointer;transition:all .15s;text-transform:uppercase}
-.start-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}.start-btn:disabled{opacity:.2;pointer-events:none;transform:none}
+.start-btn{font-family:var(--mono);font-size:13px;letter-spacing:2px;padding:13px 38px;border-radius:var(--radius);background:var(--accent);color:#fff;font-weight:700;border:none;cursor:pointer;transition:all .15s;text-transform:uppercase}
+.start-btn:hover{background:var(--accent2);transform:translateY(-1px)}.start-btn:disabled{opacity:.2;pointer-events:none;transform:none}
 .menu-btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 22px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg2);color:var(--text2);font-size:12px;font-family:var(--mono);cursor:pointer;transition:all .13s;letter-spacing:2px;text-decoration:none}
 .menu-btn:hover{border-color:var(--border2);color:var(--text);background:var(--bg3)}
-.g-back{position:absolute;top:clamp(.7rem,1.5vw,1.1rem);left:clamp(.7rem,1.5vw,1.1rem);background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:10px;cursor:pointer;font-family:var(--mono);padding:6px 12px;letter-spacing:2px;transition:all .13s}
+.g-back{position:absolute;top:1rem;left:1rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:10px;cursor:pointer;font-family:var(--mono);padding:6px 12px;letter-spacing:2px;transition:all .13s}
 .g-back:hover{border-color:var(--border2);color:var(--text)}
-.g-finish{position:absolute;top:clamp(.7rem,1.5vw,1.1rem);right:clamp(.7rem,1.5vw,1.1rem);background:rgba(76,175,80,.07);border:1.5px solid rgba(76,175,80,.3);border-radius:var(--radius);color:var(--green);font-size:10px;cursor:pointer;font-family:var(--mono);padding:6px 13px;letter-spacing:2px;transition:all .13s}
-.g-finish:hover{background:rgba(76,175,80,.18);border-color:var(--green)}
-#game-screen{justify-content:flex-start;padding:0}
-.g-header{width:100%;padding:clamp(.7rem,1.8vw,1.5rem) clamp(1rem,2.5vw,2.5rem) clamp(.5rem,1vw,.8rem);text-align:center;position:relative;flex-shrink:0}
-.timer{font-size:var(--timer);font-weight:700;line-height:1;letter-spacing:-3px;transition:color .6s;font-family:var(--mono)}
-.timer.green{color:var(--green)}.timer.orange{color:var(--orange)}.timer.red{color:var(--red)}
-@keyframes pu{0%,100%{opacity:1}50%{opacity:.45}}.timer.pulse{animation:pu .55s ease-in-out infinite}
-.timer-lbl{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-top:2px;font-family:var(--mono)}
-.stats-row{display:flex;gap:clamp(.8rem,2.5vw,2.2rem);justify-content:center;margin-top:clamp(.4rem,.9vw,.8rem)}
-.stat{text-align:center}.stat-v{font-size:var(--stat);font-weight:700;color:var(--text);transition:color .2s;font-family:var(--mono)}.stat-l{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-top:2px;font-family:var(--mono)}
-.prog-bar{width:100%;height:2px;background:var(--bg3);overflow:hidden;flex-shrink:0}
-.prog-fill{height:100%;transition:width .85s linear,background .6s;background:var(--green)}
-.g-body{width:100%;max-width:clamp(540px,84vw,880px);padding:clamp(.6rem,1.6vw,1.3rem) clamp(1rem,2.5vw,2.5rem) clamp(.7rem,1.8vw,1.6rem);align-self:center;display:flex;flex-direction:column;flex:1}
-.pmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.ptitle{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;font-family:var(--mono)}
-.dpill{font-size:8px;padding:2px 8px;border-radius:10px;border:1px solid;letter-spacing:2px;font-family:var(--mono)}
-.dpill.easy{color:var(--green);border-color:rgba(76,175,80,.3)}.dpill.normal{color:var(--blue);border-color:rgba(66,165,245,.3)}.dpill.hard{color:var(--orange);border-color:rgba(255,152,0,.3)}.dpill.extreme{color:var(--red);border-color:rgba(239,83,80,.3)}.dpill.custom{color:var(--accent);border-color:rgba(249,168,37,.3)}
-.word-area{height:clamp(110px,16vh,190px);overflow:hidden;position:relative;cursor:text;flex-shrink:0}
-.word-area::before{content:'';position:absolute;top:0;left:0;right:0;height:26px;background:linear-gradient(var(--bg),transparent);z-index:2;pointer-events:none}
-.word-area::after{content:'';position:absolute;bottom:0;left:0;right:0;height:42px;background:linear-gradient(transparent,var(--bg));z-index:2;pointer-events:none}
-#wd{font-size:var(--fs);line-height:2.2;padding:3px 0;transition:transform .3s cubic-bezier(.4,0,.2,1);will-change:transform;font-family:var(--mono)}
-.w{display:inline-block;margin-right:clamp(3px,.5vw,7px);border-radius:3px;transition:color .1s}
-.w.done{color:var(--green)}.w.wf{color:var(--red)}.w.cur{color:var(--text)}.w.pen{color:var(--text3)}
-.ch{display:inline}.ch.ok{color:#81c784}.ch.bad{color:#e57373;text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:3px}.ch.dim{color:var(--text3)}.ch.ex{color:#e57373;text-decoration:underline;text-decoration-color:var(--red)}
-.caret{display:inline-block;width:2px;height:.82em;background:var(--text);animation:blink .9s step-end infinite;vertical-align:text-bottom;margin:0 1px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-#ti{width:100%;padding:clamp(10px,1.3vw,14px) 18px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:clamp(13px,1.3vw,17px);font-family:var(--mono);outline:none;letter-spacing:3px;transition:border-color .2s,background .2s;text-align:center;margin-top:clamp(.6rem,1.2vw,1rem)}
-#ti:focus{border-color:var(--border2)}#ti.err{border-color:rgba(239,83,80,.4);background:rgba(239,83,80,.04)}
-#ti::placeholder{color:var(--text3);font-size:11px;letter-spacing:2px}#ti:disabled{opacity:.2}
-.hint{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-top:7px;text-align:center;font-family:var(--mono)}
+.g-finish{position:absolute;top:1rem;right:1rem;background:rgba(22,163,74,.08);border:1.5px solid rgba(22,163,74,.3);border-radius:var(--radius);color:var(--green);font-size:10px;cursor:pointer;font-family:var(--mono);padding:6px 13px;letter-spacing:2px;transition:all .13s}
+.g-finish:hover{background:rgba(22,163,74,.18);border-color:var(--green)}
+
+/* language selector */
 .lang-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:clamp(.8rem,2vw,1.5rem)}
 .lb{padding:7px 15px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);font-size:11px;font-family:var(--mono);cursor:pointer;transition:all .13s;letter-spacing:2px}
-.lb:hover{border-color:var(--border2);color:var(--text2)}.lb.on{border-color:var(--accent);background:rgba(249,168,37,.08);color:var(--accent);font-weight:700}
+.lb:hover{border-color:var(--border2);color:var(--text2)}.lb.on{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);font-weight:700}
 .custom-area{width:100%;max-width:clamp(380px,62vw,700px);display:none;flex-direction:column;gap:.6rem;margin-bottom:1rem}
 .custom-area.show{display:flex}
 .custom-area textarea{width:100%;height:110px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--mono);font-size:12px;padding:10px 14px;resize:vertical;outline:none;transition:border-color .2s}
-.custom-area textarea:focus{border-color:var(--border2)}
+.custom-area textarea:focus{border-color:var(--accent)}
 .custom-hint{font-size:10px;color:var(--text3);letter-spacing:2px;font-family:var(--mono)}
-#result-screen{justify-content:flex-start;padding:clamp(.8rem,2vw,1.5rem) clamp(.8rem,3vw,2rem);overflow-y:auto}
+
+/* ── GAME SCREEN ── */
+.g-header{width:100%;padding:1rem clamp(1rem,2.5vw,2.5rem) .6rem;text-align:center;position:relative;flex-shrink:0}
+.timer{font-size:var(--timer);font-weight:700;line-height:1;letter-spacing:-3px;transition:color .6s;font-family:var(--mono)}
+.timer.green{color:var(--green)}.timer.orange{color:var(--orange)}.timer.red{color:var(--red)}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.4}}.timer.pulse{animation:pu .5s ease-in-out infinite}
+.timer-lbl{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-top:3px;font-family:var(--mono)}
+.stats-row{display:flex;gap:clamp(.8rem,2.5vw,2.2rem);justify-content:center;margin-top:.6rem}
+.stat{text-align:center}.stat-v{font-size:var(--stat);font-weight:700;color:var(--text);font-family:var(--mono)}.stat-l{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-top:2px;font-family:var(--mono)}
+.prog-bar{width:100%;height:2px;background:var(--bg3);overflow:hidden;flex-shrink:0}
+.prog-fill{height:100%;transition:width .85s linear,background .6s;background:var(--green)}
+.g-body{width:100%;max-width:clamp(540px,84vw,880px);padding:.8rem clamp(1rem,2.5vw,2.5rem) 1.2rem;align-self:center;display:flex;flex-direction:column;flex:1}
+.pmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.ptitle{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;font-family:var(--mono)}
+.dpill{font-size:8px;padding:2px 8px;border-radius:10px;border:1px solid;letter-spacing:2px;font-family:var(--mono)}
+.dpill.easy{color:var(--green);border-color:rgba(22,163,74,.35);background:rgba(22,163,74,.06)}
+.dpill.normal{color:var(--accent);border-color:var(--accent-border);background:var(--accent-bg)}
+.dpill.hard{color:var(--orange);border-color:rgba(234,88,12,.35);background:rgba(234,88,12,.06)}
+.dpill.extreme{color:var(--red);border-color:rgba(220,38,38,.35);background:rgba(220,38,38,.06)}
+.dpill.custom{color:var(--accent);border-color:var(--accent-border);background:var(--accent-bg)}
+.word-area{height:clamp(108px,15vh,185px);overflow:hidden;position:relative;cursor:text;flex-shrink:0}
+.word-area::before{content:'';position:absolute;top:0;left:0;right:0;height:24px;background:linear-gradient(var(--bg),transparent);z-index:2;pointer-events:none}
+.word-area::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,var(--bg));z-index:2;pointer-events:none}
+#wd{font-size:var(--fs);line-height:2.2;padding:3px 0;transition:transform .3s cubic-bezier(.4,0,.2,1);will-change:transform;font-family:var(--mono)}
+.w{display:inline-block;margin-right:clamp(3px,.5vw,7px);border-radius:3px;transition:color .1s}
+.w.done{color:var(--green)}.w.wf{color:var(--red)}.w.cur{color:var(--text)}.w.pen{color:var(--text3)}
+.ch{display:inline}
+.ch.ok{color:#4ade80}[data-theme="light"] .ch.ok{color:#16a34a}
+.ch.bad{color:#f87171;text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:3px}
+.ch.dim{color:var(--text3)}.ch.ex{color:#f87171;text-decoration:underline;text-decoration-color:var(--red)}
+.caret{display:inline-block;width:2px;height:.82em;background:var(--text);animation:blink .9s step-end infinite;vertical-align:text-bottom;margin:0 1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+#ti{width:100%;padding:clamp(10px,1.3vw,14px) 18px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:clamp(13px,1.3vw,17px);font-family:var(--mono);outline:none;letter-spacing:3px;transition:border-color .2s,background .2s;text-align:center;margin-top:.8rem}
+#ti:focus{border-color:var(--border2)}
+#ti.err{border-color:rgba(220,38,38,.4);background:rgba(220,38,38,.04)}
+#ti::placeholder{color:var(--text3);font-size:11px;letter-spacing:2px}
+#ti:disabled{opacity:.2}
+.hint{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-top:7px;text-align:center;font-family:var(--mono)}
+
+/* ── RESULT ── */
+#result-screen{padding-top:1.5rem}
 .hs-ann{font-size:11px;color:var(--accent);letter-spacing:3px;margin-bottom:.5rem;text-align:center;display:none;font-family:var(--mono)}
 .new-badge-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:.6rem}
-.new-badge{padding:5px 12px;border-radius:20px;background:rgba(249,168,37,.12);border:1px solid rgba(249,168,37,.3);font-size:11px;color:var(--accent);font-family:var(--mono);letter-spacing:1px;animation:nbpop .4s ease both}
-@keyframes nbpop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.new-badge{padding:5px 12px;border-radius:20px;background:var(--accent-bg);border:1px solid var(--accent-border);font-size:11px;color:var(--accent);font-family:var(--mono);letter-spacing:1px}
 .res-top{display:flex;gap:clamp(.6rem,2vw,1.4rem);width:100%;max-width:960px;align-self:center;align-items:stretch;margin-bottom:clamp(.5rem,1.3vw,1rem)}
 .res-left{flex-shrink:0;text-align:left;display:flex;flex-direction:column;justify-content:center;min-width:clamp(90px,12vw,140px)}
 .rll{font-size:clamp(10px,1.1vw,13px);color:var(--text2);letter-spacing:2px;margin-bottom:1px;font-family:var(--mono)}
 .rlb{font-size:clamp(38px,5.5vw,70px);font-weight:700;color:var(--accent);line-height:1;font-family:var(--mono)}
 .tbadge{display:inline-block;padding:3px 10px;border-radius:14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-top:.4rem;font-family:var(--mono)}
-.chart-box{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:clamp(.5rem,1vw,.9rem);min-height:clamp(115px,16vh,185px);position:relative}
+.chart-box{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:.7rem;min-height:clamp(115px,16vh,185px);position:relative}
 .chart-leg{display:flex;gap:.9rem;position:absolute;top:7px;right:9px}
 .cl{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3);letter-spacing:1px;font-family:var(--mono)}
 .cl-line{width:16px;height:2px;border-radius:1px}
 #res-chart{width:100%;height:100%;display:block}
-.res-mid{display:flex;width:100%;max-width:960px;align-self:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:clamp(.5rem,1.3vw,.9rem)}
+.res-mid{display:flex;width:100%;max-width:960px;align-self:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:.8rem}
 .rm{flex:1;padding:clamp(.5rem,1vw,.9rem) clamp(.4rem,.7vw,.7rem);border-right:1px solid var(--border);text-align:left}
 .rm:last-child{border-right:none}
 .rm-l{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;font-family:var(--mono)}
 .rm-v{font-size:clamp(12px,1.4vw,17px);font-weight:700;color:var(--accent);font-family:var(--mono)}
-.cmp{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:clamp(.5rem,1.3vw,.9rem)}
+.cmp{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:.8rem}
 .cmp-ttl{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:.9rem;font-family:var(--mono)}
 .cmp-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .cmp-lbl{font-size:10px;color:var(--text2);width:clamp(90px,14vw,140px);flex-shrink:0;font-family:var(--mono)}
@@ -100,19 +119,22 @@
 .cmp-fill{height:100%;border-radius:4px;transition:width 1.3s cubic-bezier(.4,0,.2,1);width:0}
 .cmp-val{font-size:10px;color:var(--text2);width:52px;text-align:right;font-family:var(--mono)}
 .cmp-sum{font-size:11px;color:var(--text2);line-height:1.7;margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--border);font-family:var(--mono)}
-.recs-box{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:clamp(.5rem,1.3vw,.9rem)}
+.recs-box{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:.8rem}
 .recs-ttl{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:.9rem;font-family:var(--mono)}
 .rec-item{display:flex;gap:.8rem;padding:.7rem 0;border-bottom:1px solid var(--border)}
 .rec-item:last-child{border-bottom:none;padding-bottom:0}
 .rec-icon{font-size:18px;flex-shrink:0;margin-top:1px}
 .rec-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
 .rec-body{font-size:11px;color:var(--text2);line-height:1.6;font-family:var(--mono)}
-.heat-box{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:clamp(.5rem,1.3vw,.9rem)}
+.heat-box{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;width:100%;max-width:960px;align-self:center;margin-bottom:.8rem}
 .heat-ttl{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:.9rem;font-family:var(--mono)}
-#rec-screen{justify-content:flex-start;padding-top:1.2rem;overflow-y:auto}
+.res-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:100%;max-width:960px;align-self:center;margin-bottom:1rem}
+.res-meta{font-size:10px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:1rem;font-family:var(--mono)}
+
+/* records screen */
+#rec-screen{padding-top:1.5rem}
 #rec-wrap{width:100%;max-width:clamp(440px,70vw,780px)}
-.res-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:100%;max-width:960px;align-self:center}
-.res-meta{font-size:10px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-top:.7rem;font-family:var(--mono)}
+
 @media(max-width:580px){.res-top{flex-direction:column}.res-mid{flex-wrap:wrap}.rm{min-width:50%}}
 </style>
 </head>
@@ -130,6 +152,19 @@
   </div>
 </nav>
 
+<!-- Achievement Overlay -->
+<div id="ach-overlay">
+  <div id="ach-modal">
+    <span class="ach-sparkle" id="ach-icon">🏆</span>
+    <div class="ach-label">Achievement Unlocked!</div>
+    <div class="ach-modal-name" id="ach-name">Badge Name</div>
+    <div class="ach-modal-desc" id="ach-desc">Description here</div>
+    <button class="ach-close-btn" onclick="closeAch()">Continue</button>
+    <div class="ach-counter" id="ach-counter"></div>
+    <div class="ach-progress-bar"><div class="ach-progress-fill" id="ach-prog-fill"></div></div>
+  </div>
+</div>
+
 <div id="play-app">
 <!-- HOME -->
 <div id="home-screen" class="g-screen active">
@@ -137,14 +172,14 @@
     <span style="color:var(--text3)">[</span>Typer<span style="color:var(--text2)">Tester</span><span class="logo-cursor"></span><span style="color:var(--text3)">]</span>
   </div>
   <div style="font-size:clamp(8px,.9vw,11px);color:var(--text3);letter-spacing:6px;text-transform:uppercase;margin-bottom:clamp(1.5rem,3.5vw,3rem);font-family:var(--mono)">stories · speed · skill</div>
-  <button class="start-btn" onclick="sfx('btn');goScreen('opts-screen')" style="margin-bottom:12px">▶ PLAY</button>
-  <button class="menu-btn" onclick="sfx('btn');goScreen('rec-screen')" style="margin-bottom:10px">⊞ RECORDS</button>
+  <button class="start-btn" onclick="sfx('btn');goS('opts-screen')" style="margin-bottom:12px">▶ PLAY</button>
+  <button class="menu-btn" onclick="sfx('btn');goS('rec-screen')" style="margin-bottom:10px">⊞ RECORDS</button>
   <a href="progress.html" class="menu-btn">📈 PROGRESS &amp; BADGES</a>
 </div>
 
 <!-- OPTIONS -->
 <div id="opts-screen" class="g-screen" style="position:relative">
-  <button class="g-back" onclick="sfx('btn');goScreen('home-screen')">← BACK</button>
+  <button class="g-back" onclick="sfx('btn');goS('home-screen')">← BACK</button>
   <div class="pg-lbl">LANGUAGE</div>
   <div class="lang-row">
     <button class="lb on" data-lang="en" onclick="sfx('btn');pickLang('en')">🇬🇧 English</button>
@@ -153,8 +188,8 @@
     <button class="lb" data-lang="custom" onclick="sfx('btn');pickLang('custom')">✍️ Custom</button>
   </div>
   <div class="custom-area" id="custom-area">
-    <textarea id="custom-input" placeholder="Paste or type your own text here. Minimum 10 words recommended..."></textarea>
-    <div class="custom-hint">Your text will be used as typed. Punctuation included.</div>
+    <textarea id="custom-input" placeholder="Paste or type your own text here. Minimum 10 words..."></textarea>
+    <div class="custom-hint">Your text will be used as typed. Punctuation and spaces included.</div>
   </div>
   <div id="diff-section">
     <div class="pg-lbl">DIFFICULTY</div>
@@ -179,7 +214,7 @@
 </div>
 
 <!-- GAME -->
-<div id="game-screen" class="g-screen" style="justify-content:flex-start;padding:0">
+<div id="game-screen" class="g-screen">
   <div class="g-header">
     <button class="g-back" onclick="sfx('btn');endGame(true)">← QUIT</button>
     <button class="g-finish" onclick="sfx('btn');endGame(false)">■ FINISH</button>
@@ -197,7 +232,7 @@
     <div class="pmeta"><span class="ptitle" id="ptitle">passage</span><span class="dpill easy" id="dpill">EASY</span></div>
     <div class="word-area" id="wa"><div id="wd"></div></div>
     <input id="ti" type="text" placeholder="begin typing here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-    <div class="hint">space to confirm word · backspace on empty restores previous</div>
+    <div class="hint">space to confirm · backspace on empty restores previous</div>
   </div>
 </div>
 
@@ -231,7 +266,7 @@
     <div class="cmp-ttl">How you compare globally</div>
     <div class="cmp-row"><div class="cmp-lbl">You</div><div class="cmp-track"><div class="cmp-fill" id="b-you" style="background:var(--accent)"></div></div><div class="cmp-val" id="b-you-v">—</div></div>
     <div class="cmp-row"><div class="cmp-lbl">Global avg</div><div class="cmp-track"><div class="cmp-fill" id="b-avg" style="background:var(--text3)"></div></div><div class="cmp-val">~40 wpm</div></div>
-    <div class="cmp-row"><div class="cmp-lbl">Office pro</div><div class="cmp-track"><div class="cmp-fill" id="b-off" style="background:var(--blue)"></div></div><div class="cmp-val">~65 wpm</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Office pro</div><div class="cmp-track"><div class="cmp-fill" id="b-off" style="background:#60a5fa"></div></div><div class="cmp-val">~65 wpm</div></div>
     <div class="cmp-row"><div class="cmp-lbl">Pro typist</div><div class="cmp-track"><div class="cmp-fill" id="b-pro" style="background:var(--green)"></div></div><div class="cmp-val">~100 wpm</div></div>
     <div class="cmp-row"><div class="cmp-lbl">World record</div><div class="cmp-track"><div class="cmp-fill" id="b-wr" style="background:var(--red)"></div></div><div class="cmp-val">212 wpm</div></div>
     <div class="cmp-sum" id="res-sum"></div>
@@ -243,45 +278,43 @@
   <div class="heat-box">
     <div class="heat-ttl">Error Heatmap — This Test</div>
     <canvas id="heat-canvas"></canvas>
-    <div id="heat-empty" style="display:none;font-size:11px;color:var(--text3);text-align:center;padding:.8rem;font-family:var(--mono)">No errors this test — flawless!</div>
+    <div id="heat-empty" style="display:none;font-size:11px;color:var(--text3);text-align:center;padding:.8rem;font-family:var(--mono)">No errors — flawless typing!</div>
   </div>
   <div class="res-btns">
-    <button class="start-btn" onclick="sfx('btn');startGame()" style="margin-top:0">TRY AGAIN</button>
-    <button class="menu-btn" onclick="sfx('btn');goScreen('opts-screen')">SETTINGS</button>
-    <button class="menu-btn" onclick="sfx('btn');goScreen('rec-screen')">RECORDS</button>
+    <button class="start-btn" onclick="sfx('btn');startGame()">TRY AGAIN</button>
+    <button class="menu-btn" onclick="sfx('btn');goS('opts-screen')">SETTINGS</button>
+    <button class="menu-btn" onclick="sfx('btn');goS('rec-screen')">RECORDS</button>
     <a href="progress.html" class="menu-btn">📈 PROGRESS</a>
-    <button class="menu-btn" onclick="sfx('btn');goScreen('home-screen')">HOME</button>
+    <button class="menu-btn" onclick="sfx('btn');goS('home-screen')">HOME</button>
   </div>
   <div class="res-meta" id="res-meta"></div>
 </div>
 
 <!-- RECORDS -->
 <div id="rec-screen" class="g-screen">
-  <button class="g-back" style="position:relative;top:auto;left:auto;align-self:flex-start;margin-bottom:.8rem" onclick="sfx('btn');goScreen('home-screen')">← BACK</button>
+  <button class="g-back" style="position:relative;top:auto;left:auto;align-self:flex-start;margin-bottom:.8rem" onclick="sfx('btn');goS('home-screen')">← BACK</button>
   <div class="pg-lbl" style="margin-bottom:3px">RECORDS</div>
   <div class="pg-sub">your best performances</div>
   <div id="rec-wrap"></div>
 </div>
-</div><!-- /play-app -->
+</div>
 
 <script>
-// ── PASSAGES ──
-var PASSAGES = {
-en:[
+var PASS={en:[
   {d:'easy',t:'Dogs and Cats',s:'Dogs are one of the best pets in the world. They like to run and play. A dog will wag its tail when it sees you. Some dogs are big and some are very small. Cats are also great pets. They like to sleep in the sun and sit on your lap. Both dogs and cats need food and water each day. If you are kind to them they will be your friend for life.'},
   {d:'easy',t:'The Rain',s:'Rain falls from the sky when clouds get full of water. The drops hit the roof and make a soft sound. After the rain the grass is wet and green. Frogs love the rain and jump in the mud. Kids like to put on boots and splash in the rain. Plants need rain to grow tall and strong. Rain fills the lakes and rivers so fish can swim.'},
-  {d:'easy',t:'The Sun',s:'The sun is a big star in the sky. It gives us light and heat each day. Plants use sunlight to make food and grow. We need the sun to see and stay warm. In the day the sun is high and bright. At dusk it turns red and orange as it goes down. In summer the sun stays up for a long time and the days feel warm.'},
+  {d:'easy',t:'The Sun',s:'The sun is a big star in the sky. It gives us light and heat each day. Plants use sunlight to make food and grow. We need the sun to see and stay warm. In the day the sun is high and bright. At dusk it turns red and orange as it goes down. In summer the sun stays up for a long time and the days feel warm and long.'},
   {d:'easy',t:'The Sea',s:'The sea is a large body of salt water that covers most of the Earth. Waves roll in and out along the shore all day and night. Fish swim in schools below the surface. Crabs walk along the sand and hide under rocks. Seagulls fly above looking for food to eat. Boats sail across the sea to bring goods from one place to another.'},
-  {d:'normal',t:'The Story of Coffee',s:"Legend has it that coffee was first found by a goat herder in Ethiopia around the ninth century. He saw his goats dancing with strange energy after eating berries from a tree. Monks at a nearby monastery tried making a drink from the berries and found it kept them awake during evening prayers. Word traveled east and coffee began to be grown across the Arabian Peninsula. By the fifteenth century coffeehouses spread across the Middle East."},
-  {d:'normal',t:'Honeybees',s:'A single honeybee will visit up to one thousand flowers and fly nearly three miles to fill one spoonful of honey. Bees communicate with each other by doing a waggle dance that tells the hive where the best flowers are. The queen of a healthy colony can lay two thousand eggs in a single day. Without bees to carry pollen between plants the crops that feed most life on Earth would slowly fail.'},
-  {d:'normal',t:'Apollo 11',s:'On the sixteenth of July nineteen sixty nine three astronauts began the first human journey to the Moon. Neil Armstrong Buzz Aldrin and Michael Collins launched aboard a Saturn V rocket and traveled for four days. Armstrong and Aldrin descended to the surface while Collins orbited above. The astronauts planted a flag collected rock samples and left a plaque reading we came in peace for all mankind.'},
-  {d:'normal',t:'The Silk Road',s:'For over a thousand years the Silk Road connected China Rome Persia and India through a network of trade routes spanning more than four thousand miles. Silk was the most prized commodity traveling west but the routes also carried spices glassware and precious metals in both directions. Buddhism spread from India into China along these routes. Mathematical concepts paper and gunpowder moved westward changing European civilization forever.'},
-  {d:'hard',t:'Library of Alexandria',s:"At its height the Great Library of Alexandria housed between four hundred thousand and seven hundred thousand scrolls representing a vast collection of ancient knowledge. Founded in the third century before the common era it employed scholars who translated texts from dozens of languages and conducted research spanning mathematics medicine poetry and astronomy. Euclid systematized geometry there and Eratosthenes calculated the circumference of Earth with remarkable precision using only observations of shadows."},
-  {d:'hard',t:'Relativity',s:"When Albert Einstein published his special theory of relativity in nineteen oh five he was a twenty six year old patent clerk with no academic position. Yet the paper fundamentally transformed humanity's understanding of space time matter and energy. Einstein demonstrated that time is not a fixed universal backdrop but is instead relative depending on the observer's velocity and position in a gravitational field. This effect is verified and corrected for in every GPS satellite system today."},
-  {d:'hard',t:'Industrial Revolution',s:'The Industrial Revolution originating in Britain during the seventeen sixties constituted perhaps the most consequential transformation of human civilization since the advent of agriculture. Within a century steam powered machinery displaced human and animal labor across textile mills coal mines and iron foundries restructuring the economic foundations of society. Urbanization accelerated as rural populations migrated toward manufacturing centers encountering dangerous working conditions.'},
-  {d:'extreme',t:'Consciousness',s:"Consciousness remains perhaps the most intractable problem at the confluence of neuroscience philosophy of mind and theoretical physics. The challenge concerns not merely the functional architecture by which neural systems integrate information but the ontological question of why any physical process should be accompanied by subjective phenomenal experience at all. Chalmers formalized this as the hard problem of consciousness. Integrated Information Theory proposes that consciousness is a fundamental property of systems exhibiting high degrees of irreducible causal integration."},
-  {d:'extreme',t:'Quantum Entanglement',s:'Quantum entanglement describes a correlational structure between particles that defies classical conceptions of locality such that the measurement of one particle instantaneously determines the quantum state of its partner irrespective of the spatial separation between them. Einstein characterized this as spooky action at a distance. Bell subsequently derived mathematical inequalities that any locally realistic theory must satisfy and demonstrated that quantum predictions systematically violate these constraints.'},
-  {d:'extreme',t:'The Nature of Time',s:"Time presents the most perplexing foundational puzzle in contemporary physics. Newtonian mechanics conceived of time as an absolute universal parameter flowing uniformly. Einstein's relativity demolished this conception demonstrating that temporal duration is observer dependent with clocks in relative motion measuring genuinely different elapsed intervals. At the quantum scale the distinction between past and future becomes philosophically ambiguous since the fundamental dynamical equations operate symmetrically in both temporal directions."}
+  {d:'normal',t:'The Story of Coffee',s:"Legend has it that coffee was first found by a goat herder in Ethiopia around the ninth century. He saw his goats dancing with strange energy after eating berries from a tree. Monks at a nearby monastery tried making a drink from the berries and found it kept them awake during evening prayers. Word traveled east and coffee began to be grown across the Arabian Peninsula. By the fifteenth century coffeehouses spread across the Middle East becoming vibrant centers of social activity and intellectual exchange."},
+  {d:'normal',t:'Honeybees',s:'A single honeybee will visit up to one thousand flowers and fly nearly three miles to fill one spoonful of honey. Bees communicate with each other by doing a waggle dance that tells the hive where the best flowers are. The queen of a healthy colony can lay two thousand eggs in a single day. Without bees to carry pollen between plants the crops that feed most life on Earth would slowly fail. Scientists are working hard to protect bee populations worldwide.'},
+  {d:'normal',t:'Apollo 11',s:'On the sixteenth of July nineteen sixty nine three astronauts began the first human journey to the Moon. Neil Armstrong Buzz Aldrin and Michael Collins launched aboard a Saturn V rocket and traveled for four days. Armstrong and Aldrin descended to the surface while Collins orbited above. The astronauts planted a flag collected rock samples and left a plaque reading we came in peace for all mankind. They returned safely eight days after launch.'},
+  {d:'normal',t:'The Silk Road',s:'For over a thousand years the Silk Road connected China Rome Persia and India through a network of trade routes spanning more than four thousand miles. Silk was the most prized commodity traveling west but the routes also carried spices glassware and precious metals in both directions. Buddhism spread from India into China along these routes. Mathematical concepts paper and gunpowder moved westward changing European civilization in profound and lasting ways.'},
+  {d:'hard',t:'Library of Alexandria',s:"At its height the Great Library of Alexandria housed between four hundred thousand and seven hundred thousand scrolls representing a vast collection of ancient knowledge. Founded in the third century before the common era under Ptolemaic patronage it employed scholars who translated texts from dozens of languages and conducted research spanning mathematics medicine poetry and astronomy. Euclid systematized geometry there and Eratosthenes calculated the circumference of Earth with remarkable precision using only observations of shadows and angles."},
+  {d:'hard',t:'Relativity',s:"When Albert Einstein published his special theory of relativity in nineteen oh five he was a twenty six year old patent clerk with no academic position. Yet the paper fundamentally transformed humanity's understanding of space time matter and energy. Einstein demonstrated that time is not a fixed universal backdrop but is instead relative depending on the observer's velocity and gravitational position. This counterintuitive insight is verified and corrected for in every GPS satellite system orbiting the Earth today."},
+  {d:'hard',t:'Industrial Revolution',s:'The Industrial Revolution originating in Britain during the seventeen sixties constituted perhaps the most consequential transformation of human civilization since the advent of agriculture. Within a century steam powered machinery displaced human and animal labor across textile mills coal mines and iron foundries restructuring the economic foundations of society. Urbanization accelerated dramatically as rural populations migrated toward manufacturing centers encountering overcrowded housing and dangerous working conditions that would eventually inspire organized reform movements.'},
+  {d:'extreme',t:'Consciousness',s:"Consciousness remains perhaps the most intractable problem at the confluence of neuroscience philosophy of mind and theoretical physics. The challenge concerns not merely the functional architecture by which neural systems integrate and broadcast information but the ontological question of why any physical process should be accompanied by subjective phenomenal experience at all. David Chalmers formalized this as the hard problem of consciousness distinguishing it from the comparatively tractable soft problems of attention and behavioral coordination. Integrated Information Theory proposes that consciousness is a fundamental property of systems exhibiting high degrees of irreducible causal integration measured by the quantity phi."},
+  {d:'extreme',t:'Quantum Entanglement',s:'Quantum entanglement describes a correlational structure between particles that defies classical conceptions of locality and separability such that the measurement of one particle instantaneously determines the quantum state of its partner irrespective of the spatial separation between them. Einstein characterized this as spooky action at a distance arguing it revealed an incompleteness in quantum mechanical description. Bell subsequently derived mathematical inequalities that any locally realistic hidden variable theory must satisfy and demonstrated that quantum predictions systematically violate these constraints in every experimental test performed.'},
+  {d:'extreme',t:'The Nature of Time',s:"Time presents the most perplexing foundational puzzle in contemporary physics simultaneously constituting the dimension most intimately familiar to human experience and the one whose fundamental nature remains most obscure. Newtonian mechanics conceived of time as an absolute universal parameter flowing uniformly against which all events unfold. Einstein's general relativity demolished this conception demonstrating that temporal duration is observer dependent with clocks in relative motion or differing gravitational potentials measuring genuinely different elapsed intervals. The arrow of time we perceive emerges thermodynamically from entropy increase rather than from microphysical law."}
 ],
 fil:[
   {d:'easy',t:'Ang Pamilya',s:'Ang pamilya ay mahalaga sa bawat tao. Ang mga magulang ay nagmamalasakit sa kanilang mga anak. Ang kapatid ay kasamahan sa araw-araw. Sama-sama silang kumakain at nagtatawa. Ang tahanan ay lugar ng pagmamahal at kalayaan. Ang bawat miyembro ng pamilya ay may papel na ginagampanan. Mahalaga ang respeto at pagtulong sa isa at isa.'},
@@ -289,360 +322,319 @@ fil:[
   {d:'normal',t:'Kasaysayan ng Pilipinas',s:'Ang Pilipinas ay may mayamang kasaysayan. Bago dumating ang mga Espanyol noong 1565 mayroon nang mga pamayanan at kultura sa ating kapuluan. Ang mga Pilipino ay may sariling sistema ng pagsulat na tinatawag na Baybayin. Si Jose Rizal ay isinilang noong 1861 at naging bayani ng ating bansa. Isinulat niya ang Noli Me Tangere upang ipakita ang kalagayan ng mga Pilipino sa ilalim ng pananakop.'},
   {d:'normal',t:'Pagkain ng Pilipinas',s:'Ang pagkain ng Pilipinas ay mayaman at masustansya. Ang adobo ay isa sa pinakasikat na putahe na gawa sa manok o baboy. Ang sinigang ay maasim na sabaw na may gulay at karne. Ang lechon ay inihaw na baboy na niluto sa apoy sa loob ng maraming oras. Ang mga Pilipino ay nagbibigay ng pagkain sa kanilang mga bisita bilang tanda ng mabuting kalooban.'},
   {d:'hard',t:'Ang Wikang Filipino',s:'Ang wikang Filipino ay pambansang wika ng Pilipinas na batay sa Tagalog. Ito ay isa sa dalawang opisyal na wika ng bansa kasama ang Ingles. Mayroong higit sa pitumpung wika at diyalekto sa buong kapuluan ng Pilipinas. Ang pagpapaunlad ng wikang Filipino ay mahalaga para sa pagkakaisa ng bansa at pagpapanatili ng kulturang Pilipino sa gitna ng globalisasyon at makabagong teknolohiya.'},
-  {d:'extreme',t:'Ang Demokrasya',s:'Ang demokrasya sa Pilipinas ay nakabatay sa prinsipyo ng soberanya ng mamamayan at paghihiwalay ng kapangyarihan sa pagitan ng tatlong sangay ng pamahalaan. Ang Saligang Batas ng 1987 ay nagtataglay ng mga karapatang pantao at nagbibigay ng balangkas para sa isang mapagkalingang lipunan. Ang kalayaan ng pamamahayag at ng asembleya ay mga pangunahing haligi ng demokratikong lipunan na patuloy na inaalagaan ng mga mamamayan.'}
+  {d:'extreme',t:'Ang Demokrasya',s:'Ang demokrasya sa Pilipinas ay nakabatay sa prinsipyo ng soberanya ng mamamayan at paghihiwalay ng kapangyarihan sa pagitan ng tatlong sangay ng pamahalaan. Ang Saligang Batas ng 1987 ay nagtataglay ng mga karapatang pantao at nagbibigay ng balangkas para sa isang mapagkalingang lipunan. Ang kalayaan ng pamamahayag at ng asembleya ay mga pangunahing haligi ng demokratikong lipunan na patuloy na inaalagaan ng mga mamamayan sa pamamagitan ng aktibong pakikilahok.'}
 ],
 es:[
   {d:'easy',t:'La Familia',s:'La familia es lo mas importante en la vida. Los padres cuidan a sus hijos con amor y dedicacion. Los hermanos son companeros de juego y amigos para siempre. Juntos comparten comidas y momentos felices. El hogar es un lugar de paz y seguridad. Cada miembro de la familia tiene un papel importante que desempenar en la vida diaria.'},
   {d:'easy',t:'El Mar',s:'El mar es una gran extension de agua salada que cubre la mayor parte de la Tierra. Las olas llegan a la orilla todo el dia y toda la noche. Los peces nadan en bancos bajo la superficie. Los cangrejos caminan por la arena y se esconden bajo las rocas. Los barcos navegan por el mar para llevar mercancias de un lugar a otro.'},
-  {d:'normal',t:'El Cafe',s:'Cuenta la leyenda que el cafe fue descubierto por un pastor de cabras en Etiopia alrededor del siglo nueve. Observe que sus cabras bailaban con extrana energia despues de comer bayas de un arbol. Los monjes prepararon una bebida con las bayas y descubrieron que los mantenia despiertos durante las oraciones nocturnas. La palabra se extendio hacia el este y el cultivo del cafe comenzo en la Peninsula Arabiga.'},
+  {d:'normal',t:'El Cafe',s:'Cuenta la leyenda que el cafe fue descubierto por un pastor de cabras en Etiopia alrededor del siglo nueve. Observo que sus cabras bailaban con extrana energia despues de comer bayas de un arbol. Los monjes prepararon una bebida con las bayas y descubrieron que los mantenia despiertos durante las oraciones nocturnas. La palabra se extendio hacia el este y el cultivo del cafe comenzo en la Peninsula Arabiga.'},
   {d:'normal',t:'Historia de Espana',s:'Espana es un pais con una historia rica y fascinante. Durante la Edad Media fue escenario de la convivencia de tres culturas: la cristiana la musulmana y la judia. En 1492 los Reyes Catolicos completaron la Reconquista y Cristobal Colon llego a America. El Imperio espanol se convirtio en uno de los mas grandes de la historia abarcando territorios en America Asia y Africa.'},
-  {d:'hard',t:'La Filosofia',s:'La tradicion filosofica espanola cuenta con pensadores de extraordinaria profundidad como Miguel de Unamuno y Jose Ortega y Gasset. Unamuno exploro el tema de la inmortalidad personal y el sentido tragico de la vida humana en obras que combinaban la filosofia con la literatura y la teologia. Ortega desarrollo el perspectivismo argumentando que la realidad solo puede comprenderse desde multiples puntos de vista complementarios.'},
-  {d:'extreme',t:'La Relatividad',s:'Cuando Einstein publico su teoria especial de la relatividad en 1905 era un joven de veintiseis anos que trabajaba como empleado en una oficina de patentes sin ninguna posicion academica. Sin embargo el articulo contenia ideas que transformarian fundamentalmente la comprension humana del espacio el tiempo la materia y la energia. Einstein demostro que el tiempo no es un telon de fondo universal fijo sino relativo dependiendo de la velocidad del observador.'}
+  {d:'hard',t:'La Filosofia',s:'La tradicion filosofica espanola cuenta con pensadores de extraordinaria profundidad como Miguel de Unamuno y Jose Ortega y Gasset. Unamuno exploro el tema de la inmortalidad personal y el sentido tragico de la vida humana en obras que combinaban la filosofia con la literatura y la teologia. Ortega desarrollo el perspectivismo argumentando que la realidad solo puede comprenderse desde multiples puntos de vista complementarios e irreducibles.'},
+  {d:'extreme',t:'La Relatividad',s:'Cuando Einstein publico su teoria especial de la relatividad en 1905 era un joven de veintiseis anos que trabajaba como empleado en una oficina de patentes sin ninguna posicion academica. Sin embargo el articulo contenia ideas que transformarian fundamentalmente la comprension humana del espacio el tiempo la materia y la energia. Einstein demostro que el tiempo no es un telon de fondo universal fijo sino relativo dependiendo de la velocidad del observador y de su posicion en un campo gravitacional.'}
 ]};
 
-// ── STATE ──
-var diff='easy', lang='en', totalTime=15, timeLeft=15, customMode=false;
-var words=[], wordIdx=0, statuses=[], typedHist=[];
-var lineMap=[], lineTops=[], curLine=0;
-var tmr=null, going=false, correct=0, errors=0;
-var wpmData=[], errorSecs=[];
-var correctChars=0, incorrectChars=0, lastErrState=false;
-var mistypedKeys={}, sessionMistypedKeys={};
+var diff='easy',lang='en',totalTime=15,timeLeft=15,customMode=false;
+var words=[],wordIdx=0,statuses=[],typedHist=[];
+var lineMap=[],lineTops=[],curLine=0;
+var tmr=null,going=false,correct=0,errors=0;
+var wpmData=[],errorSecs=[];
+var correctChars=0,incorrectChars=0,lastErrState=false;
+var mistypedKeys={},sessionMistypedKeys={};
 var records=[];
-try{ records=JSON.parse(localStorage.getItem('tt_v8')||'[]'); }catch(e){ records=[]; }
-try{ mistypedKeys=JSON.parse(localStorage.getItem('tt_mistyped')||'{}'); }catch(e){ mistypedKeys={}; }
+try{records=JSON.parse(localStorage.getItem('tt_v8')||'[]')}catch(e){records=[]}
+try{mistypedKeys=JSON.parse(localStorage.getItem('tt_mistyped')||'{}')}catch(e){mistypedKeys={}}
 
-function fT(s){ return s>=60 ? Math.floor(s/60)+'m'+(s%60?' '+s%60+'s':'') : s+'s'; }
-function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function goScreen(id){
-  document.querySelectorAll('.g-screen').forEach(function(s){ s.classList.remove('active'); });
-  document.getElementById(id).classList.add('active');
-  if(id==='rec-screen') renderRecords();
-  if(id==='result-screen') setTimeout(function(){ drawChart(); drawHeatmapResult(); }, 120);
+// Achievement overlay queue
+var achQueue=[],achAutoTimer=null;
+function showAch(badges){
+  if(!badges||!badges.length) return;
+  achQueue=badges.slice();
+  setTimeout(nextAch,700);
+}
+function nextAch(){
+  if(!achQueue.length) return;
+  var b=achQueue.shift();
+  var ol=document.getElementById('ach-overlay');
+  var icon=document.getElementById('ach-icon');
+  icon.textContent=b.icon; icon.style.animation='none';
+  setTimeout(function(){icon.style.animation='achspin 1s ease-out';},10);
+  document.getElementById('ach-name').textContent=b.name;
+  document.getElementById('ach-desc').textContent=b.desc;
+  document.getElementById('ach-counter').textContent=achQueue.length>0?achQueue.length+' more to show':'';
+  ol.classList.add('show');
+  // Progress bar auto-close indicator
+  var fill=document.getElementById('ach-prog-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 4s linear';fill.style.width='0%';},50);
+  if(achAutoTimer) clearTimeout(achAutoTimer);
+  achAutoTimer=setTimeout(closeAch,4200);
+}
+function closeAch(){
+  clearTimeout(achAutoTimer);
+  document.getElementById('ach-overlay').classList.remove('show');
+  if(achQueue.length>0) setTimeout(nextAch,400);
 }
 
+function fT(s){return s>=60?Math.floor(s/60)+'m'+(s%60?' '+s%60+'s':''):s+'s'}
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function goS(id){
+  document.querySelectorAll('.g-screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  if(id==='rec-screen') renderRecords();
+  if(id==='result-screen') setTimeout(function(){drawChart();drawHeatRes();},120);
+}
 function pickLang(l){
-  lang=l; customMode=(l==='custom');
-  document.querySelectorAll('.lb').forEach(function(b){ b.classList.remove('on'); });
+  lang=l;customMode=(l==='custom');
+  document.querySelectorAll('.lb').forEach(function(b){b.classList.remove('on')});
   document.querySelector('.lb[data-lang="'+l+'"]').classList.add('on');
-  document.getElementById('custom-area').classList.toggle('show', customMode);
-  document.getElementById('diff-section').style.display = customMode ? 'none' : '';
-  document.getElementById('start-btn').disabled = customMode ? false : !document.querySelector('.dc.sel');
+  document.getElementById('custom-area').classList.toggle('show',customMode);
+  document.getElementById('diff-section').style.display=customMode?'none':'';
+  document.getElementById('start-btn').disabled=customMode?false:!document.querySelector('.dc.sel');
 }
 function pickDiff(d){
   diff=d;
-  document.querySelectorAll('.dc').forEach(function(c){ c.classList.remove('sel'); if(c.dataset.d===d) c.classList.add('sel'); });
-  document.getElementById('start-btn').disabled = false;
+  document.querySelectorAll('.dc').forEach(function(c){c.classList.remove('sel');if(c.dataset.d===d)c.classList.add('sel')});
+  document.getElementById('start-btn').disabled=false;
 }
 function pickTime(t){
-  totalTime=t; timeLeft=t;
-  document.querySelectorAll('.tb').forEach(function(b){ b.classList.remove('on'); });
+  totalTime=t;timeLeft=t;
+  document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('on')});
   document.querySelector('.tb[data-t="'+t+'"]').classList.add('on');
 }
-
 function startGame(){
   var all=[];
   if(customMode){
     var raw=(document.getElementById('custom-input').value||'').trim();
-    if(!raw || raw.split(/\s+/).length < 5){ alert('Please enter at least 5 words.'); return; }
-    all=raw.split(/\s+/).filter(function(w){ return w.trim(); });
-    while(all.length<400){ all=all.concat(all); }
+    if(!raw||raw.split(/\s+/).length<5){alert('Please enter at least 5 words.');return}
+    all=raw.split(/\s+/).filter(function(w){return w.trim()});
+    while(all.length<400)all=all.concat(all);
     document.getElementById('ptitle').textContent='Custom Text';
   } else {
-    var pool=(PASSAGES[lang]||PASSAGES['en']).filter(function(p){ return p.d===diff; });
-    var sh=pool.slice().sort(function(){ return Math.random()-.5; });
-    for(var i=0;i<16;i++) all=all.concat(sh[i%sh.length].s.split(/\s+/).filter(function(w){ return w.trim(); }));
+    var pool=(PASS[lang]||PASS['en']).filter(function(p){return p.d===diff});
+    var sh=pool.slice().sort(function(){return Math.random()-.5});
+    for(var i=0;i<16;i++)all=all.concat(sh[i%sh.length].s.split(/\s+/).filter(function(w){return w.trim()}));
     document.getElementById('ptitle').textContent=sh[0].t;
   }
-  words=all; statuses=new Array(words.length).fill('pen'); typedHist=new Array(words.length).fill('');
-  statuses[0]='cur'; wordIdx=0; correct=0; errors=0; going=false; timeLeft=totalTime; curLine=0;
-  wpmData=[]; errorSecs=[]; correctChars=0; incorrectChars=0; lastErrState=false; sessionMistypedKeys={};
+  words=all;statuses=new Array(words.length).fill('pen');typedHist=new Array(words.length).fill('');
+  statuses[0]='cur';wordIdx=0;correct=0;errors=0;going=false;timeLeft=totalTime;curLine=0;
+  wpmData=[];errorSecs=[];correctChars=0;incorrectChars=0;lastErrState=false;sessionMistypedKeys={};
   clearInterval(tmr);
   var dp=document.getElementById('dpill');
-  dp.textContent = customMode?'CUSTOM':(lang!=='en'?lang.toUpperCase()+' · ':'')+diff.toUpperCase();
+  dp.textContent=customMode?'CUSTOM':(lang!=='en'?lang.toUpperCase()+' · ':'')+diff.toUpperCase();
   dp.className='dpill '+(customMode?'custom':diff);
   document.getElementById('g-timer').textContent=timeLeft;
   document.getElementById('g-timer').className='timer green';
-  document.getElementById('g-wpm').textContent='—';
-  document.getElementById('g-words').textContent='0';
-  document.getElementById('g-acc').textContent='—';
-  document.getElementById('g-err').textContent='0';
-  document.getElementById('g-err').style.color='var(--text3)';
+  ['g-wpm','g-words','g-acc','g-err'].forEach(function(id,i){
+    var el=document.getElementById(id);el.textContent=i===0||i===2?'—':0;
+    if(i===3)el.style.color='var(--text3)';
+  });
   var pf=document.getElementById('prog');
-  pf.style.transition='none'; pf.style.width='100%'; pf.style.background='var(--green)';
-  setTimeout(function(){ pf.style.transition='width .85s linear,background .6s'; }, 80);
-  goScreen('game-screen'); initDisplay();
-  var inp=document.getElementById('ti');
-  inp.value=''; inp.disabled=false; inp.classList.remove('err');
-  setTimeout(function(){ inp.focus(); }, 150);
+  pf.style.transition='none';pf.style.width='100%';pf.style.background='var(--green)';
+  setTimeout(function(){pf.style.transition='width .85s linear,background .6s'},80);
+  goS('game-screen');initDisplay();
+  var inp=document.getElementById('ti');inp.value='';inp.disabled=false;inp.classList.remove('err');
+  setTimeout(function(){inp.focus()},150);
 }
-
 function initDisplay(){
   var wd=document.getElementById('wd');
-  wd.style.transition='none'; wd.style.transform='translateY(0)';
-  wd.innerHTML=words.map(function(w,i){ return '<span class="w pen" id="w'+i+'">'+escH(w)+'</span>'; }).join(' ');
+  wd.style.transition='none';wd.style.transform='translateY(0)';
+  wd.innerHTML=words.map(function(w,i){return'<span class="w pen" id="w'+i+'">'+escH(w)+'</span>'}).join(' ');
   document.getElementById('w0').className='w cur';
   document.getElementById('w0').innerHTML=buildCW('');
-  setTimeout(function(){ measureLines(); curLine=0; wd.style.transition='transform .3s cubic-bezier(.4,0,.2,1)'; doScroll(); }, 60);
+  setTimeout(function(){measureLines();curLine=0;wd.style.transition='transform .3s cubic-bezier(.4,0,.2,1)';doScroll()},60);
 }
 function measureLines(){
-  var spans=document.querySelectorAll('#wd .w'); var tops=[]; var map=[];
-  spans.forEach(function(sp,i){ var t=Math.round(sp.offsetTop); if(tops.indexOf(t)<0) tops.push(t); map[i]=t; });
-  tops.sort(function(a,b){ return a-b; }); lineTops=tops; lineMap=map.map(function(t){ return tops.indexOf(t); });
+  var spans=document.querySelectorAll('#wd .w');var tops=[];var map=[];
+  spans.forEach(function(sp,i){var t=Math.round(sp.offsetTop);if(tops.indexOf(t)<0)tops.push(t);map[i]=t});
+  tops.sort(function(a,b){return a-b});lineTops=tops;lineMap=map.map(function(t){return tops.indexOf(t)});
 }
-function doScroll(){
-  var sl=Math.max(0,curLine-1);
-  document.getElementById('wd').style.transform='translateY(-'+(lineTops[sl]||0)+'px)';
-}
+function doScroll(){var sl=Math.max(0,curLine-1);document.getElementById('wd').style.transform='translateY(-'+(lineTops[sl]||0)+'px)'}
 function buildCW(typed){
-  var word=words[wordIdx]||''; var h='';
+  var word=words[wordIdx]||'';var h='';
   for(var i=0;i<Math.max(typed.length,word.length);i++){
-    var wc=word[i]?escH(word[i]):''; var tc=typed[i]?escH(typed[i]):'';
-    if(i<typed.length&&i<word.length) h+='<span class="ch '+(typed[i]===word[i]?'ok':'bad')+'">'+wc+'</span>';
-    else if(i<typed.length) h+='<span class="ch ex">'+tc+'</span>';
+    var wc=word[i]?escH(word[i]):'';var tc=typed[i]?escH(typed[i]):'';
+    if(i<typed.length&&i<word.length)h+='<span class="ch '+(typed[i]===word[i]?'ok':'bad')+'">'+wc+'</span>';
+    else if(i<typed.length)h+='<span class="ch ex">'+tc+'</span>';
     else h+='<span class="ch dim">'+wc+'</span>';
   }
   return h+'<span class="caret"></span>';
 }
-function hasErr(typed){
-  var w=words[wordIdx]||'';
-  if(typed.length>w.length) return true;
-  for(var i=0;i<typed.length;i++) if(typed[i]!==w[i]) return true;
-  return false;
-}
-function setStyle(typed){
-  var inp=document.getElementById('ti');
-  var e=typed.length>0&&hasErr(typed);
-  inp.classList.toggle('err',e);
-  if(e&&!lastErrState) sfx('err');
-  lastErrState=e;
-}
-function badChars(typed,word){
-  var b=0;
-  for(var i=0;i<Math.max(typed.length,word.length);i++){
-    if(i>=word.length||i>=typed.length||typed[i]!==word[i]) b++;
-  }
-  return b;
-}
-function trackMistypes(typed,word){
-  if(!word||!typed) return;
-  for(var i=0;i<Math.min(typed.length,word.length);i++){
-    if(typed[i]!==word[i]){
-      var k=word[i].toLowerCase();
-      sessionMistypedKeys[k]=(sessionMistypedKeys[k]||0)+1;
-      mistypedKeys[k]=(mistypedKeys[k]||0)+1;
-    }
-  }
-}
+function hasErr(t){var w=words[wordIdx]||'';if(t.length>w.length)return true;for(var i=0;i<t.length;i++)if(t[i]!==w[i])return true;return false}
+function setStyle(t){var inp=document.getElementById('ti');var e=t.length>0&&hasErr(t);inp.classList.toggle('err',e);if(e&&!lastErrState)sfx('err');lastErrState=e}
+function badChars(t,w){var b=0;for(var i=0;i<Math.max(t.length,w.length);i++){if(i>=w.length||i>=t.length||t[i]!==w[i])b++}return b}
+function trackMist(t,w){if(!w||!t)return;for(var i=0;i<Math.min(t.length,w.length);i++){if(t[i]!==w[i]){var k=w[i].toLowerCase();sessionMistypedKeys[k]=(sessionMistypedKeys[k]||0)+1;mistypedKeys[k]=(mistypedKeys[k]||0)+1}}}
 
-document.addEventListener('DOMContentLoaded', function(){
-  var ti=document.getElementById('ti');
-  if(!ti) return;
-
-  ti.addEventListener('keydown', function(e){
-    if(!document.getElementById('game-screen').classList.contains('active')) return;
+document.addEventListener('DOMContentLoaded',function(){
+  var ti=document.getElementById('ti');if(!ti)return;
+  ti.addEventListener('keydown',function(e){
+    if(!document.getElementById('game-screen').classList.contains('active'))return;
     if(e.key==='Backspace'&&e.target.value===''){
       if(wordIdx>0){
         e.preventDefault();
-        var cs=document.getElementById('w'+wordIdx);
-        if(cs){ cs.className='w pen'; cs.innerHTML=escH(words[wordIdx]||''); }
-        statuses[wordIdx]='pen'; wordIdx--;
-        if(statuses[wordIdx]==='done'){ correct--; correctChars-=(words[wordIdx]||'').length; }
-        else if(statuses[wordIdx]==='wf'){ errors--; incorrectChars-=badChars(typedHist[wordIdx]||'',words[wordIdx]||''); }
+        var cs=document.getElementById('w'+wordIdx);if(cs){cs.className='w pen';cs.innerHTML=escH(words[wordIdx]||'')}
+        statuses[wordIdx]='pen';wordIdx--;
+        if(statuses[wordIdx]==='done'){correct--;correctChars-=(words[wordIdx]||'').length}
+        else if(statuses[wordIdx]==='wf'){errors--;incorrectChars-=badChars(typedHist[wordIdx]||'',words[wordIdx]||'')}
         statuses[wordIdx]='cur';
         var prev=typedHist[wordIdx]||'';
-        var ps=document.getElementById('w'+wordIdx);
-        if(ps){ ps.className='w cur'; ps.innerHTML=buildCW(prev); }
-        e.target.value=prev; lastErrState=false; setStyle(prev);
-        var nl=lineMap[wordIdx]||0; if(nl!==curLine){ curLine=nl; doScroll(); }
-        updateStats(); sfx('key');
+        var ps=document.getElementById('w'+wordIdx);if(ps){ps.className='w cur';ps.innerHTML=buildCW(prev)}
+        e.target.value=prev;lastErrState=false;setStyle(prev);
+        var nl=lineMap[wordIdx]||0;if(nl!==curLine){curLine=nl;doScroll()}
+        updateStats();sfx('key');
       }
     }
   });
-
-  ti.addEventListener('input', function(e){
-    if(!document.getElementById('game-screen').classList.contains('active')) return;
+  ti.addEventListener('input',function(e){
+    if(!document.getElementById('game-screen').classList.contains('active'))return;
     var v=e.target.value;
-    if(!going&&v.length>0){ going=true; tmr=setInterval(tick,1000); }
+    if(!going&&v.length>0){going=true;tmr=setInterval(tick,1000)}
     if(v.endsWith(' ')){
-      var typed=v.trim(); if(!typed){ e.target.value=''; return; }
-      typedHist[wordIdx]=typed;
-      trackMistypes(typed,words[wordIdx]||'');
+      var typed=v.trim();if(!typed){e.target.value='';return}
+      typedHist[wordIdx]=typed;trackMist(typed,words[wordIdx]||'');
       var ok=typed===(words[wordIdx]||'');
-      var ps2=document.getElementById('w'+wordIdx);
-      if(ps2){ ps2.className='w '+(ok?'done':'wf'); ps2.innerHTML=escH(words[wordIdx]); }
+      var ps2=document.getElementById('w'+wordIdx);if(ps2){ps2.className='w '+(ok?'done':'wf');ps2.innerHTML=escH(words[wordIdx])}
       statuses[wordIdx]=ok?'done':'wf';
-      if(ok){ correct++; correctChars+=(words[wordIdx]||'').length; sfx('word'); }
-      else{ errors++; incorrectChars+=badChars(typed,words[wordIdx]||''); errorSecs.push(wpmData.length); sfx('wrong'); }
+      if(ok){correct++;correctChars+=(words[wordIdx]||'').length;sfx('word')}
+      else{errors++;incorrectChars+=badChars(typed,words[wordIdx]||'');errorSecs.push(wpmData.length);sfx('wrong')}
       wordIdx++;
       if(wordIdx>=words.length-10){
-        var extra=[];
-        if(customMode) extra=words.slice(0,Math.min(50,words.length));
-        else{ var p2=(PASSAGES[lang]||PASSAGES['en']).filter(function(p){ return p.d===diff; }); extra=p2[Math.floor(Math.random()*p2.length)].s.split(/\s+/).filter(function(w){ return w.trim(); }); }
+        var extra=customMode?words.slice(0,Math.min(50,words.length)):(PASS[lang]||PASS['en']).filter(function(p){return p.d===diff})[0].s.split(/\s+/).filter(function(w){return w.trim()});
         var base=words.length;
-        extra.forEach(function(w,i){ words.push(w); statuses.push('pen'); typedHist.push(''); var sp=document.createElement('span'); sp.className='w pen'; sp.id='w'+(base+i); sp.textContent=w; document.getElementById('wd').appendChild(document.createTextNode(' ')); document.getElementById('wd').appendChild(sp); });
+        extra.forEach(function(w,i){words.push(w);statuses.push('pen');typedHist.push('');var sp=document.createElement('span');sp.className='w pen';sp.id='w'+(base+i);sp.textContent=w;document.getElementById('wd').appendChild(document.createTextNode(' '));document.getElementById('wd').appendChild(sp)});
         setTimeout(measureLines,30);
       }
-      statuses[wordIdx]='cur';
-      var ns=document.getElementById('w'+wordIdx);
-      if(ns){ ns.className='w cur'; ns.innerHTML=buildCW(''); }
-      var nl2=lineMap[wordIdx]||0; if(nl2!==curLine){ curLine=nl2; doScroll(); }
-      e.target.value=''; lastErrState=false; e.target.classList.remove('err'); updateStats();
-    } else {
-      sfx('key');
-      var cs2=document.getElementById('w'+wordIdx); if(cs2) cs2.innerHTML=buildCW(v);
-      setStyle(v);
-    }
+      statuses[wordIdx]='cur';var ns=document.getElementById('w'+wordIdx);if(ns){ns.className='w cur';ns.innerHTML=buildCW('')}
+      var nl2=lineMap[wordIdx]||0;if(nl2!==curLine){curLine=nl2;doScroll()}
+      e.target.value='';lastErrState=false;e.target.classList.remove('err');updateStats();
+    } else {sfx('key');var cs2=document.getElementById('w'+wordIdx);if(cs2)cs2.innerHTML=buildCW(v);setStyle(v)}
   });
-
-  var wa=document.getElementById('wa');
-  if(wa) wa.addEventListener('click', function(){ document.getElementById('ti').focus(); });
+  document.getElementById('wa').addEventListener('click',function(){document.getElementById('ti').focus()});
 });
 
 function tick(){
-  timeLeft--;
-  document.getElementById('g-timer').textContent=timeLeft;
+  timeLeft--;document.getElementById('g-timer').textContent=timeLeft;
   var ratio=timeLeft/totalTime;
-  var td=document.getElementById('g-timer');
-  td.classList.remove('green','orange','red','pulse');
-  if(ratio>0.6) td.classList.add('green');
-  else if(ratio>0.25) td.classList.add('orange');
-  else{ td.classList.add('red'); if(ratio<0.15) td.classList.add('pulse'); }
-  var pf=document.getElementById('prog');
-  pf.style.width=(ratio*100)+'%';
-  pf.style.background=ratio>0.6?'var(--green)':ratio>0.25?'var(--orange)':'var(--red)';
-  var el=totalTime-timeLeft;
-  wpmData.push({ wpm:el>0?Math.round((correct/el)*60):0, raw:el>0?Math.round(((correct+errors)/el)*60):0 });
-  updateStats();
-  if(timeLeft<=0) endGame(false);
+  var td=document.getElementById('g-timer');td.classList.remove('green','orange','red','pulse');
+  if(ratio>0.6)td.classList.add('green');else if(ratio>0.25)td.classList.add('orange');else{td.classList.add('red');if(ratio<0.15)td.classList.add('pulse')}
+  var pf=document.getElementById('prog');pf.style.width=(ratio*100)+'%';pf.style.background=ratio>0.6?'var(--green)':ratio>0.25?'var(--orange)':'var(--red)';
+  var el=totalTime-timeLeft;wpmData.push({wpm:el>0?Math.round((correct/el)*60):0,raw:el>0?Math.round(((correct+errors)/el)*60):0});
+  updateStats();if(timeLeft<=0)endGame(false);
 }
 function updateStats(){
-  var el=totalTime-timeLeft; var wpm=el>0?Math.round((correct/el)*60):0;
-  var tot=correct+errors; var acc=tot>0?Math.round((correct/tot)*100):null;
-  document.getElementById('g-wpm').textContent=el>0?wpm:'—';
-  document.getElementById('g-words').textContent=correct;
+  var el=totalTime-timeLeft;var wpm=el>0?Math.round((correct/el)*60):0;var tot=correct+errors;var acc=tot>0?Math.round((correct/tot)*100):null;
+  document.getElementById('g-wpm').textContent=el>0?wpm:'—';document.getElementById('g-words').textContent=correct;
   document.getElementById('g-acc').textContent=acc!==null?acc+'%':'—';
-  var ee=document.getElementById('g-err'); ee.textContent=errors; ee.style.color=errors>0?'var(--red)':'var(--text3)';
+  var ee=document.getElementById('g-err');ee.textContent=errors;ee.style.color=errors>0?'var(--red)':'var(--text3)';
 }
 function endGame(quit){
-  clearInterval(tmr); document.getElementById('ti').disabled=true;
-  if(quit){ goScreen('home-screen'); return; }
-  try{ localStorage.setItem('tt_mistyped',JSON.stringify(mistypedKeys)); }catch(e){}
+  clearInterval(tmr);document.getElementById('ti').disabled=true;
+  if(quit){goS('home-screen');return}
+  try{localStorage.setItem('tt_mistyped',JSON.stringify(mistypedKeys))}catch(e){}
   var el=totalTime-timeLeft;
-  var wpm=el>0?Math.round((correct/el)*60):0;
-  var rawWpm=el>0?Math.round(((correct+errors)/el)*60):0;
-  var tot=correct+errors; var acc=tot>0?Math.round((correct/tot)*100):100;
-  var vals=wpmData.map(function(d){ return d.wpm; }).filter(function(v){ return v>0; });
-  var mean=vals.length?vals.reduce(function(a,b){ return a+b; },0)/vals.length:0;
-  var std=vals.length?Math.sqrt(vals.map(function(v){ return (v-mean)*(v-mean); }).reduce(function(a,b){ return a+b; },0)/vals.length):0;
+  var wpm=el>0?Math.round((correct/el)*60):0;var rawWpm=el>0?Math.round(((correct+errors)/el)*60):0;
+  var tot=correct+errors;var acc=tot>0?Math.round((correct/tot)*100):100;
+  var vals=wpmData.map(function(d){return d.wpm}).filter(function(v){return v>0});
+  var mean=vals.length?vals.reduce(function(a,b){return a+b},0)/vals.length:0;
+  var std=vals.length?Math.sqrt(vals.map(function(v){return(v-mean)*(v-mean)}).reduce(function(a,b){return a+b},0)/vals.length):0;
   var cons=mean>0?Math.max(0,Math.round(100-(std/mean*100))):0;
-  document.getElementById('res-wpm').textContent=wpm;
-  document.getElementById('res-acc').textContent=acc+'%';
-  document.getElementById('res-raw').textContent=rawWpm;
-  document.getElementById('res-chars').textContent=correctChars+'/'+incorrectChars;
-  document.getElementById('res-cons').textContent=cons+'%';
-  document.getElementById('res-errs').textContent=errors;
+  document.getElementById('res-wpm').textContent=wpm;document.getElementById('res-acc').textContent=acc+'%';
+  document.getElementById('res-raw').textContent=rawWpm;document.getElementById('res-chars').textContent=correctChars+'/'+incorrectChars;
+  document.getElementById('res-cons').textContent=cons+'%';document.getElementById('res-errs').textContent=errors;
   document.getElementById('res-time').textContent=fT(Math.min(el,totalTime));
   document.getElementById('res-meta').textContent=(customMode?'CUSTOM':(lang!=='en'?lang.toUpperCase()+' · ':'')+diff.toUpperCase())+' · '+fT(totalTime)+' test';
-  var TIERS=[[25,'Beginner','#666'],[40,'Below Avg','#888'],[55,'Average','var(--blue)'],[70,'Above Avg','var(--blue)'],[90,'Fast','var(--green)'],[120,'Professional','var(--accent)'],[150,'Elite','var(--red)'],[9999,'World-Class','var(--red)']];
-  var tier=TIERS[0]; for(var ti2=0;ti2<TIERS.length;ti2++){ if(wpm<TIERS[ti2][0]){ tier=TIERS[ti2]; break; } }
-  var tb=document.getElementById('res-tier'); tb.textContent=tier[1]; tb.style.background=tier[2]+'22'; tb.style.color=tier[2]; tb.style.border='1px solid '+tier[2]+'44';
+  var TIERS=[[25,'Beginner','#6b7280'],[40,'Below Avg','#9ca3af'],[55,'Average','var(--accent)'],[70,'Above Avg','var(--accent)'],[90,'Fast','var(--green)'],[120,'Professional','#7c3aed'],[150,'Elite','var(--red)'],[9999,'World-Class','var(--red)']];
+  var tier=TIERS[0];for(var ti2=0;ti2<TIERS.length;ti2++){if(wpm<TIERS[ti2][0]){tier=TIERS[ti2];break}}
+  var tb=document.getElementById('res-tier');tb.textContent=tier[1];tb.style.background=tier[2]+'22';tb.style.color=tier[2];tb.style.border='1px solid '+tier[2]+'44';
   var mx=Math.max(wpm+20,220);
-  setTimeout(function(){
-    setBar('b-you',wpm,mx); document.getElementById('b-you-v').textContent=wpm+' wpm';
-    setBar('b-avg',40,mx); setBar('b-off',65,mx); setBar('b-pro',100,mx); setBar('b-wr',212,mx);
-  },400);
+  setTimeout(function(){setBar('b-you',wpm,mx);document.getElementById('b-you-v').textContent=wpm+' wpm';setBar('b-avg',40,mx);setBar('b-off',65,mx);setBar('b-pro',100,mx);setBar('b-wr',212,mx)},400);
   var msg='';
-  if(wpm<25) msg=wpm+' WPM is below the global average of 40. With 15 min of daily practice you can reach average in weeks.';
-  else if(wpm<40) msg=wpm+' WPM — close to the global average of 40. A little more practice and you will be above average!';
-  else if(wpm<55) msg=wpm+' WPM is right at the global average. You are in the top 50% of typists worldwide!';
-  else if(wpm<70) msg=wpm+' WPM is above average — faster than roughly 60% of people. Professional level is within reach.';
-  else if(wpm<90) msg=wpm+' WPM is fast — you are in the top 20% globally. Push toward 90+ WPM for professional tier.';
-  else if(wpm<120) msg=wpm+' WPM is professional level. You type faster than about 95% of all computer users. Excellent!';
-  else msg=wpm+' WPM is elite — top 1% worldwide. Truly exceptional performance.';
+  if(wpm<25)msg=wpm+' WPM is below average. With 15 min of daily practice you can reach the global average of 40 WPM in a few weeks.';
+  else if(wpm<40)msg=wpm+' WPM is close to the global average of 40. A little more focused practice and you will be above average!';
+  else if(wpm<55)msg=wpm+' WPM is right at the global average. You are in the top 50% of typists worldwide!';
+  else if(wpm<70)msg=wpm+' WPM is above average — faster than about 60% of people globally. Professional level is within reach.';
+  else if(wpm<90)msg=wpm+' WPM is fast — you are in the top 20% globally. Keep pushing toward professional level (90+ WPM).';
+  else if(wpm<120)msg=wpm+' WPM is professional level. You type faster than roughly 95% of all computer users. Excellent work!';
+  else msg=wpm+' WPM is elite performance — top 1% worldwide. Truly exceptional.';
   document.getElementById('res-sum').textContent=msg;
-  var scoreObj={w:wpm,a:acc,e:errors,cons:cons,d:diff,dur:totalTime,mode:customMode?'custom':'normal',lang:lang};
-  var recs2=TTFeatures.getRecommendations(scoreObj);
-  document.getElementById('rec-list').innerHTML=recs2.length?recs2.map(function(r){ return '<div class="rec-item"><div class="rec-icon">'+r.icon+'</div><div><div class="rec-title">'+r.title+'</div><div class="rec-body">'+r.body+'</div></div></div>'; }).join(''):'<div style="font-size:11px;color:var(--text3);padding:.5rem 0;font-family:var(--mono)">Great work! Keep pushing your limits.</div>';
-  var prevBest=records.filter(function(r){ return r.d===diff; }).sort(function(a,b){ return b.w-a.w; })[0];
+  var sc={w:wpm,a:acc,e:errors,cons:cons,d:diff,dur:totalTime,mode:customMode?'custom':'normal',lang:lang};
+  var recs2=TTFeatures.getRecommendations(sc);
+  document.getElementById('rec-list').innerHTML=recs2.length?recs2.map(function(r){return'<div class="rec-item"><div class="rec-icon">'+r.icon+'</div><div><div class="rec-title">'+r.title+'</div><div class="rec-body">'+r.body+'</div></div></div>'}).join(''):'<div style="font-size:11px;color:var(--text3);padding:.5rem;font-family:var(--mono)">Great work! Keep pushing your limits.</div>';
+  var prevBest=records.filter(function(r){return r.d===diff}).sort(function(a,b){return b.w-a.w})[0];
   var isHS=wpm>0&&(!prevBest||wpm>prevBest.w);
   document.getElementById('hs-ann').style.display=isHS?'block':'none';
   var rec={w:wpm,a:acc,c:correct,e:errors,d:diff,dur:totalTime,cons:cons,lang:lang,mode:customMode?'custom':'normal',dt:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})};
-  records.unshift(rec); if(records.length>500) records=records.slice(0,500);
-  try{ localStorage.setItem('tt_v8',JSON.stringify(records)); }catch(e){}
+  records.unshift(rec);if(records.length>500)records=records.slice(0,500);
+  try{localStorage.setItem('tt_v8',JSON.stringify(records))}catch(e){}
   var newBadges=TTFeatures.checkAchievements(rec,records);
-  document.getElementById('new-badges').innerHTML=newBadges.map(function(b){ return '<div class="new-badge">'+b.icon+' '+b.name+' unlocked!</div>'; }).join('');
-  goScreen('result-screen');
+  document.getElementById('new-badges').innerHTML=newBadges.map(function(b){return'<div class="new-badge">'+b.icon+' '+b.name+'</div>'}).join('');
+  goS('result-screen');
+  // Show achievement overlays
+  if(newBadges.length) showAch(newBadges);
 }
-function setBar(id,val,max){ var el=document.getElementById(id); if(el) el.style.width=Math.min(100,(val/max)*100)+'%'; }
+function setBar(id,val,max){var el=document.getElementById(id);if(el)el.style.width=Math.min(100,(val/max)*100)+'%'}
 function drawChart(){
-  var canvas=document.getElementById('res-chart'); if(!canvas) return;
-  var box=canvas.parentElement; var dpr=window.devicePixelRatio||1;
-  var W=box.clientWidth-16, H=box.clientHeight-24; if(W<=0||H<=0) return;
-  canvas.width=W*dpr; canvas.height=H*dpr; canvas.style.width=W+'px'; canvas.style.height=H+'px';
-  var ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  if(wpmData.length<2){ ctx.fillStyle='rgba(128,128,128,0.2)'; ctx.font='11px monospace'; ctx.textAlign='center'; ctx.fillText('Type longer to see speed chart',W/2,H/2); return; }
-  var pad={t:8,r:40,b:22,l:6}; var cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
-  var n=wpmData.length;
-  var maxV=0; wpmData.forEach(function(d){ if(d.wpm>maxV) maxV=d.wpm; if(d.raw>maxV) maxV=d.raw; }); if(maxV<10) maxV=10;
+  var canvas=document.getElementById('res-chart');if(!canvas)return;
+  var box=canvas.parentElement;var dpr=window.devicePixelRatio||1;
+  var W=box.clientWidth-14,H=box.clientHeight-20;if(W<=0||H<=0)return;
+  canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';
+  var ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  if(wpmData.length<2){ctx.fillStyle='rgba(128,128,128,0.2)';ctx.font='11px monospace';ctx.textAlign='center';ctx.fillText('Type longer to see speed chart',W/2,H/2);return}
+  var pad={t:8,r:40,b:22,l:6};var cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  var n=wpmData.length;var maxV=0;wpmData.forEach(function(d){if(d.wpm>maxV)maxV=d.wpm;if(d.raw>maxV)maxV=d.raw});if(maxV<10)maxV=10;
   var yMax=Math.ceil(maxV/10)*10+10;
-  var xS=function(i){ return pad.l+(i/(n-1))*cw; };
-  var yS=function(v){ return pad.t+ch-(v/yMax)*ch; };
-  for(var y=0;y<=yMax;y+=10){ var yp=yS(y); ctx.strokeStyle='rgba(128,128,128,0.07)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad.l,yp); ctx.lineTo(W-pad.r,yp); ctx.stroke(); ctx.fillStyle='rgba(128,128,128,0.25)'; ctx.font='9px monospace'; ctx.textAlign='left'; ctx.fillText(y,W-pad.r+4,yp+3); }
-  ctx.beginPath(); ctx.strokeStyle='rgba(128,128,128,0.28)'; ctx.lineWidth=1.5; ctx.setLineDash([4,5]);
-  wpmData.forEach(function(d,i){ i===0?ctx.moveTo(xS(i),yS(d.raw)):ctx.lineTo(xS(i),yS(d.raw)); }); ctx.stroke(); ctx.setLineDash([]);
-  var sm=wpmData.map(function(d,i,a){ var sl=a.slice(Math.max(0,i-3),i+4); return sl.reduce(function(s,v){ return s+v.wpm; },0)/sl.length; });
-  var pts=sm.map(function(v,i){ return {x:xS(i),y:yS(v)}; });
-  var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+ch); grad.addColorStop(0,'rgba(249,168,37,0.18)'); grad.addColorStop(1,'rgba(249,168,37,0)');
-  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
-  for(var i2=1;i2<pts.length-1;i2++){ var mx2=(pts[i2].x+pts[i2+1].x)/2, my2=(pts[i2].y+pts[i2+1].y)/2; ctx.quadraticCurveTo(pts[i2].x,pts[i2].y,mx2,my2); }
-  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y); ctx.lineTo(pts[pts.length-1].x,pad.t+ch); ctx.lineTo(pts[0].x,pad.t+ch); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
-  ctx.beginPath(); ctx.strokeStyle='#f9a825'; ctx.lineWidth=2.5; ctx.moveTo(pts[0].x,pts[0].y);
-  for(var i3=1;i3<pts.length-1;i3++){ var mx3=(pts[i3].x+pts[i3+1].x)/2, my3=(pts[i3].y+pts[i3+1].y)/2; ctx.quadraticCurveTo(pts[i3].x,pts[i3].y,mx3,my3); }
-  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y); ctx.stroke();
-  ctx.fillStyle='#f9a825'; pts.forEach(function(p,i){ if(i%Math.max(1,Math.floor(n/20))===0){ ctx.beginPath(); ctx.arc(p.x,p.y,2.5,0,Math.PI*2); ctx.fill(); } });
-  errorSecs.forEach(function(t){ if(t>=n) return; var x=xS(t), ey=yS(sm[t]||0), s=5; ctx.strokeStyle='#ef5350'; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x-s,ey-s); ctx.lineTo(x+s,ey+s); ctx.moveTo(x+s,ey-s); ctx.lineTo(x-s,ey+s); ctx.stroke(); });
+  var xS=function(i){return pad.l+(i/(n-1))*cw};var yS=function(v){return pad.t+ch-(v/yMax)*ch};
+  for(var y=0;y<=yMax;y+=10){var yp=yS(y);ctx.strokeStyle='rgba(128,128,128,0.07)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,yp);ctx.lineTo(W-pad.r,yp);ctx.stroke();ctx.fillStyle='rgba(128,128,128,0.25)';ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText(y,W-pad.r+4,yp+3)}
+  ctx.beginPath();ctx.strokeStyle='rgba(128,128,128,0.28)';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);wpmData.forEach(function(d,i){i===0?ctx.moveTo(xS(i),yS(d.raw)):ctx.lineTo(xS(i),yS(d.raw))});ctx.stroke();ctx.setLineDash([]);
+  var sm=wpmData.map(function(d,i,a){var sl=a.slice(Math.max(0,i-3),i+4);return sl.reduce(function(s,v){return s+v.wpm},0)/sl.length});
+  var pts=sm.map(function(v,i){return{x:xS(i),y:yS(v)}});
+  // Get accent color from CSS var
+  var accentColor='#5b9cf6';
+  try{var s=getComputedStyle(document.documentElement);accentColor=s.getPropertyValue('--accent').trim()||accentColor}catch(e){}
+  var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+ch);grad.addColorStop(0,accentColor+'30');grad.addColorStop(1,accentColor+'00');
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(var i2=1;i2<pts.length-1;i2++){var mx=(pts[i2].x+pts[i2+1].x)/2,my=(pts[i2].y+pts[i2+1].y)/2;ctx.quadraticCurveTo(pts[i2].x,pts[i2].y,mx,my)}
+  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y);ctx.lineTo(pts[pts.length-1].x,pad.t+ch);ctx.lineTo(pts[0].x,pad.t+ch);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  ctx.beginPath();ctx.strokeStyle=accentColor;ctx.lineWidth=2.5;ctx.moveTo(pts[0].x,pts[0].y);
+  for(var i3=1;i3<pts.length-1;i3++){var mx2=(pts[i3].x+pts[i3+1].x)/2,my2=(pts[i3].y+pts[i3+1].y)/2;ctx.quadraticCurveTo(pts[i3].x,pts[i3].y,mx2,my2)}
+  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y);ctx.stroke();
+  ctx.fillStyle=accentColor;pts.forEach(function(p,i){if(i%Math.max(1,Math.floor(n/20))===0){ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fill()}});
+  errorSecs.forEach(function(t){if(t>=n)return;var x=xS(t),ey=yS(sm[t]||0),s2=5;ctx.strokeStyle='var(--red)';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(x-s2,ey-s2);ctx.lineTo(x+s2,ey+s2);ctx.moveTo(x+s2,ey-s2);ctx.lineTo(x-s2,ey+s2);ctx.stroke()});
 }
-function drawHeatmapResult(){
+function drawHeatRes(){
   var has=Object.keys(sessionMistypedKeys).length>0;
   document.getElementById('heat-empty').style.display=has?'none':'block';
   document.getElementById('heat-canvas').style.display=has?'block':'none';
-  if(has) TTFeatures.drawHeatmap('heat-canvas',sessionMistypedKeys);
+  if(has)TTFeatures.drawHeatmap('heat-canvas',sessionMistypedKeys);
 }
 function renderRecords(){
   var el=document.getElementById('rec-wrap');
-  if(!records.length){ el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:1.5rem 0;text-align:center;letter-spacing:2px;font-family:var(--mono)">No records yet — play a game!</div>'; return; }
-  var top=records.slice().sort(function(a,b){ return b.w-a.w; }).slice(0,5);
-  var recent=records.slice(0,3);
-  var dc=function(d){ return d==='easy'?'var(--green)':d==='normal'?'var(--blue)':d==='hard'?'var(--orange)':'var(--red)'; };
+  if(!records.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:1.5rem 0;text-align:center;letter-spacing:2px;font-family:var(--mono)">No records yet — play a game!</div>';return}
+  var top=records.slice().sort(function(a,b){return b.w-a.w}).slice(0,5);var recent=records.slice(0,3);
+  var dc=function(d){return d==='easy'?'var(--green)':d==='normal'?'var(--accent)':d==='hard'?'var(--orange)':'var(--red)'};
   function row(r,i,isTop){
     var hs=isTop&&i===0;
-    return '<div style="display:flex;align-items:center;padding:10px 12px;border-radius:var(--radius);gap:8px;margin-bottom:4px;background:var(--bg2);border:1.5px solid '+(hs?'var(--accent)':'var(--border)')+';position:relative;overflow:hidden">'+
-      (hs?'<div style="position:absolute;inset:0;background:rgba(249,168,37,.03)"></div>':'')+
-      '<div style="font-family:var(--mono);font-size:11px;color:'+(hs?'var(--accent)':'var(--text3)')+';width:18px;text-align:center;font-weight:700">'+(i+1)+'</div>'+
-      '<div style="font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid;color:'+dc(r.d)+';border-color:'+dc(r.d)+'44">'+(r.d||'—')+'</div>'+
-      (r.lang&&r.lang!=='en'?'<div style="font-family:var(--mono);font-size:9px;color:var(--text3)">'+r.lang+'</div>':'')+
-      (hs?'<div style="font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;background:rgba(249,168,37,.1);border:1px solid rgba(249,168,37,.3);color:var(--accent);letter-spacing:1px">BEST</div>':'')+
+    return'<div style="display:flex;align-items:center;padding:10px 12px;border-radius:var(--radius);gap:8px;margin-bottom:4px;background:var(--bg2);border:1.5px solid '+(hs?'var(--accent)':'var(--border)')+';position:relative;overflow:hidden">'+
+      (hs?'<div style="position:absolute;inset:0;background:var(--accent-bg)"></div>':'')+
+      '<div style="font-family:var(--mono);font-size:11px;color:'+(hs?'var(--accent)':'var(--text3)')+';width:18px;text-align:center;font-weight:700;position:relative">'+(i+1)+'</div>'+
+      '<div style="font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid;color:'+dc(r.d)+';border-color:'+dc(r.d)+'44;position:relative">'+(r.d||'—')+'</div>'+
+      (r.lang&&r.lang!=='en'?'<div style="font-family:var(--mono);font-size:9px;color:var(--text3);position:relative">'+r.lang+'</div>':'')+
+      (hs?'<div style="font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent);letter-spacing:1px;position:relative">BEST</div>':'')+
       '<div style="flex:1"></div>'+
       '<div style="font-family:var(--mono);font-size:10px;color:var(--text3);width:30px;text-align:right">'+fT(r.dur)+'</div>'+
       '<div style="font-family:var(--mono);font-size:11px;color:var(--text2);width:34px;text-align:right">'+r.a+'%</div>'+
       '<div style="font-family:var(--mono);font-size:17px;font-weight:700;color:var(--text)">'+r.w+'<span style="font-size:10px;color:var(--text2);font-weight:400"> wpm</span></div>'+
-      '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);width:58px;text-align:right">'+(r.dt||'—')+'</div>'+
-      '</div>';
+      '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);width:58px;text-align:right">'+(r.dt||'—')+'</div></div>';
   }
   el.innerHTML=
     '<div style="font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:7px;font-family:var(--mono)">★ TOP 5 SCORES</div>'+
-    top.map(function(r,i){ return row(r,i,true); }).join('')+
+    top.map(function(r,i){return row(r,i,true)}).join('')+
     '<div style="height:.8rem"></div>'+
     '<div style="font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:7px;font-family:var(--mono)">⟳ RECENT 3 GAMES</div>'+
-    recent.map(function(r,i){ return row(r,i,false); }).join('')+
-    '<div style="display:flex;justify-content:center;margin-top:1rem"><button onclick="clearRecs()" style="font-family:var(--mono);font-size:11px;letter-spacing:2px;padding:8px 20px;border-radius:var(--radius);border:1.5px solid #3a2020;color:#aa6666;background:#130f0f;cursor:pointer">CLEAR ALL</button></div>';
+    recent.map(function(r,i){return row(r,i,false)}).join('')+
+    '<div style="display:flex;justify-content:center;margin-top:1rem"><button onclick="clearRecs()" style="font-family:var(--mono);font-size:11px;letter-spacing:2px;padding:8px 20px;border-radius:var(--radius);border:1.5px solid rgba(220,38,38,.3);color:var(--red);background:rgba(220,38,38,.06);cursor:pointer">CLEAR ALL</button></div>';
 }
-function clearRecs(){
-  if(!confirm('Clear all records?')) return;
-  records=[]; try{ localStorage.removeItem('tt_v8'); }catch(e){} renderRecords();
-}
+function clearRecs(){if(!confirm('Clear all records?'))return;records=[];try{localStorage.removeItem('tt_v8')}catch(e){}renderRecords()}
 </script>
 </body>
 </html>
